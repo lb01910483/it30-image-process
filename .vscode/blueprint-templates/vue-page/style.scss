@@ -1,0 +1,10 @@
+@import 'assets/style/init';
+
+#pg_{{ snakeCase name }} {
+  
+}
+
+// $desktopHD | $desktop | $tablet | $mobile
+@include devicepoint($desktopHD) {
+
+}

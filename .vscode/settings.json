@@ -1,0 +1,49 @@
+{
+  "files.autoSave": "onWindowChange",
+  "editor.tabSize": 2,
+  "editor.rulers": [80, 120],
+  "editor.wordWrapColumn": 120,
+  "editor.wordWrap": "wordWrapColumn",
+  "editor.formatOnSave": true,
+  "emmet.syntaxProfiles": {
+    "vue-html": "html",
+    "vue": "html"
+  },
+  "emmet.includeLanguages": {
+    "vue-html": "html",
+    "vue": "html"
+  },
+  "html.format.wrapLineLength": 120,
+  "html.format.wrapAttributes": "force-expand-multiline",
+  "javascript.validate.enable": false,
+  "vetur.format.styleInitialIndent": true,
+  "vetur.format.scriptInitialIndent": true,
+  "vetur.format.defaultFormatter.html": "js-beautify-html",
+  "vetur.format.defaultFormatterOptions": {
+    "js-beautify-html": {
+      "wrap_attributes": "force-expand-multiline"
+    },
+    "prettier": {
+      "printWidth": 120,
+      "semi": false,
+      "eslintIntegration": false,
+      "singleQuote": true,
+      "disableLanguages": ["html"]
+    },
+    "prettier.semi": false,
+    "prettier.singleQuote": true
+  },
+  "prettier.semi": false,
+  "prettier.singleQuote": true,
+  "eslint.validate": ["javascript", "html", "vue"],
+  "blueprint.templatesPath": [".vscode/blueprint-templates"],
+  "cSpell.words": ["mixins", "LIFECYCLE", "nuxt", "nuxtjs", "vuex"],
+  "cSpell.ignorePaths": [
+    "**/package-lock.json",
+    "**/node_modules/**",
+    "**/vscode-extension/**",
+    "**/.git/**",
+    ".vscode",
+    "typings"
+  ]
+}
