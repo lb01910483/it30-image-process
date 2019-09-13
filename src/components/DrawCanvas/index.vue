@@ -1,41 +1,46 @@
-<template>
-  <div>
-    <input
-      type="file"
-      accept="image/*"
-      @change="getData"
-    >
-    <div>
-      <canvas ref="drawCanvas" />
-    </div>
-  </div>
-</template>
-
 <script>
-  import { getImageData } from '../lib/utils'
-  import { grayscale } from '../lib/filter'
+  import { getImageData } from '../../lib/utils'
+  import ImageInfo from '../ImageInfo'
   export default {
     name: 'DrawCanvas',
+    components: {
+      ImageInfo
+    },
+    data() {
+      return {
+        rgbaInfo: [],
+        imgWidth: 0,
+        imgHeight: 0
+      }
+    },
     methods: {
-      drawImage(data) {
+      drawImage(imageContent) {
         const canvas = this.$refs.drawCanvas
         const context = canvas.getContext('2d')
         const cw = window.innerWidth - 800
         const ch = cw * (9 / 16)
         canvas.width = cw
         canvas.height = ch
-        context.drawImage(data.img, 0, 0, cw, ch)
+        context.drawImage(imageContent, 0, 0, cw, ch)
         const pixelData = context.getImageData(0, 0, cw, ch)
-        let t0 = window.performance.now()
-        grayscale(pixelData.data)
-        let t1 = window.performance.now()
-
         context.putImageData(pixelData, 0, 0)
       },
       async getData(event) {
         const file = event.target.files[0]
         const data = await getImageData(file)
+        this.drawImage(data.img)
+        this.imgWidth = data.width
+        this.imgHeight = data.height
         this.getOriginalData(data)
+      },
+      getImageInfo(x, y) {
+        const canvas = this.$refs.drawCanvas
+        const context = canvas.getContext('2d')
+        return context.getImageData(x, y, 1, 1).data
+      },
+      handleMouseMove(event) {
+        const { offsetX, offsetY } = event
+        this.rgbaInfo = this.getImageInfo(offsetX, offsetY)
       },
       getOriginalData(data) {
         const canvas = document.createElement('canvas')
@@ -46,10 +51,11 @@
         const pixelData = ctx.getImageData(0, 0, data.width, data.height)
       },
 
+
     },
 
   }
 </script>
 
-<style lang="scss">
-</style>
+<template src="./template.html" />
+<style lang="scss" src="./style.scss" scoped />

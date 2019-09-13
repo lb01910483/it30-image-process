@@ -1,0 +1,20 @@
+<div class="draw_canvas">
+  <div class="center">
+    <div class="upload_btn">
+      上傳
+      <input
+        type="file"
+        accept="image/jpg,image/jpeg,image/png"
+        @change="getData"
+      />
+    </div>
+  </div>
+  <div class="image_container">
+    <div class="canvas_container">
+      <canvas ref="drawCanvas" @mousemove="handleMouseMove"> </canvas>
+    </div>
+    <div class="image_editor" v-if="imgWidth">
+      <ImageInfo :rgbaInfo="rgbaInfo" :width="imgWidth" :height="imgHeight" />
+    </div>
+  </div>
+</div>

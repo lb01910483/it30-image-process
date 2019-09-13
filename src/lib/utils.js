@@ -8,7 +8,7 @@ export const fileLoad = file => {
 }
 export const imgLoad = src => {
   return new Promise((resolve, reject) => {
-    let img = new Image()
+    const img = new Image()
     img.onload = () => resolve(img)
     img.onerror = reject
     img.src = src
@@ -22,7 +22,6 @@ export const getImageData = async file => {
     const width = img.width
     const height = img.height
     return {
-      src,
       width,
       height,
       img
