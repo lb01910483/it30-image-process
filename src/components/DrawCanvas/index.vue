@@ -1,5 +1,6 @@
 <script>
   import { getImageData } from '../../lib/utils'
+  import * as filter from '../../lib/filter'
   import ImageInfo from '../ImageInfo'
   export default {
     name: 'DrawCanvas',
@@ -23,6 +24,7 @@
         canvas.height = ch
         context.drawImage(imageContent, 0, 0, cw, ch)
         const pixelData = context.getImageData(0, 0, cw, ch)
+        filter.grayscale(pixelData.data)
         context.putImageData(pixelData, 0, 0)
       },
       async getData(event) {
@@ -31,7 +33,7 @@
         this.drawImage(data.img)
         this.imgWidth = data.width
         this.imgHeight = data.height
-        this.getOriginalData(data)
+        // this.getOriginalData(data)
       },
       getImageInfo(x, y) {
         const canvas = this.$refs.drawCanvas
@@ -40,7 +42,7 @@
       },
       handleMouseMove(event) {
         const { offsetX, offsetY } = event
-        this.rgbaInfo = this.getImageInfo(offsetX, offsetY)
+        this.rgbaInfo = Array.from(this.getImageInfo(offsetX, offsetY))
       },
       getOriginalData(data) {
         const canvas = document.createElement('canvas')
