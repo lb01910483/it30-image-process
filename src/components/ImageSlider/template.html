@@ -1,0 +1,9 @@
+<div class="image_slider">
+  <Slider
+    title="曝光度"
+    :min="-100"
+    :max="100"
+    :value="brightness"
+    @sliderChange="val => sliderChange(val, 'brightness')"
+  ></Slider>
+</div>

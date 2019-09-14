@@ -2,10 +2,13 @@
   import { getImageData } from '../../lib/utils'
   import * as filter from '../../lib/filter'
   import ImageInfo from '../ImageInfo'
+  import ImageSlider from '../ImageSlider'
+  import { mapGetters } from 'vuex'
   export default {
     name: 'DrawCanvas',
     components: {
-      ImageInfo
+      ImageInfo,
+      ImageSlider
     },
     data() {
       return {
@@ -13,6 +16,9 @@
         imgWidth: 0,
         imgHeight: 0
       }
+    },
+    computed: {
+      ...mapGetters(['editImageData'])
     },
     methods: {
       drawImage(imageContent) {
@@ -24,8 +30,7 @@
         canvas.height = ch
         context.drawImage(imageContent, 0, 0, cw, ch)
         const pixelData = context.getImageData(0, 0, cw, ch)
-        filter.grayscale(pixelData.data)
-        context.putImageData(pixelData, 0, 0)
+        this.$store.commit('CHANGE_STATE_VALUE', { key: 'originalEditData', val: pixelData })
       },
       async getData(event) {
         const file = event.target.files[0]
@@ -44,6 +49,11 @@
         const { offsetX, offsetY } = event
         this.rgbaInfo = Array.from(this.getImageInfo(offsetX, offsetY))
       },
+      updateImage(pixelData) {
+        const canvas = this.$refs.drawCanvas
+        const context = canvas.getContext('2d')
+        context.putImageData(pixelData, 0, 0)
+      },
       getOriginalData(data) {
         const canvas = document.createElement('canvas')
         canvas.width = data.width
@@ -52,9 +62,12 @@
         ctx.drawImage(data.img, 0, 0)
         const pixelData = ctx.getImageData(0, 0, data.width, data.height)
       },
-
-
     },
+    watch: {
+      editImageData(pixelData) {
+        this.updateImage(pixelData)
+      }
+    }
 
   }
 </script>

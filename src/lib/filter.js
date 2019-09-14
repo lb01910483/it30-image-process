@@ -17,3 +17,13 @@ export const invert = pixelData => {
   }
   return pixelData
 }
+
+export const brightness = (pixelData, amount) => {
+  // 每次跳四個索引，也就是一個像素，不處理透明度
+  for (let i = 0; i < pixelData.length; i += 4) {
+    pixelData[i] = pixelData[i] + amount // red
+    pixelData[i + 1] = pixelData[i + 1] + amount // green
+    pixelData[i + 2] = pixelData[i + 2] + amount // blue
+  }
+  return pixelData
+}
