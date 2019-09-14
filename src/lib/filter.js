@@ -28,16 +28,21 @@ export const brightness = (pixelData, amount) => {
   return pixelData
 }
 export const calculateBrightness = pixelData => {
-  const result = []
+  const tmp = {}
   for (let i = 0; i < pixelData.length; i += 4) {
     const red = pixelData[i]
     const green = pixelData[i + 1]
     const blue = pixelData[i + 2]
-    const brightness = 0.299 * red + 0.587 * green + 0.114 * blue
-    result.push([Math.round(brightness)])
+    const brightness = Math.round(0.299 * red + 0.587 * green + 0.114 * blue)
+    tmp[brightness] = tmp[brightness] || 0
+    tmp[brightness] += 1
     // pixelData[i] = brightness
     // pixelData[i + 1] = brightness
     // pixelData[i + 2] = brightness
   }
+  const result = []
+  Object.keys(tmp).forEach(key => {
+    result.push([key, tmp[key]])
+  })
   return result
 }

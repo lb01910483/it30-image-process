@@ -13,8 +13,8 @@
     <div class="canvas_container">
       <canvas ref="drawCanvas" @mousemove="handleMouseMove"> </canvas>
     </div>
-    <div class="image_editor" v-if="imgWidth">
-      <ImageInfo :rgbaInfo="rgbaInfo" :width="imgWidth" :height="imgHeight" />
+    <div class="image_editor" v-show="imgWidth">
+      <ImageInfo :rgbaInfo="rgbaInfo" :width="imgWidth" :height="imgHeight"  />
       <ImageSlider />
     </div>
   </div>

@@ -24,7 +24,8 @@
       drawImage(imageContent) {
         const canvas = this.$refs.drawCanvas
         const context = canvas.getContext('2d')
-        const cw = window.innerWidth - 800
+        let cw = window.innerWidth - 800
+        cw = cw < 800 ? 800 : cw
         const ch = cw * (9 / 16)
         canvas.width = cw
         canvas.height = ch
@@ -66,6 +67,7 @@
     watch: {
       editImageData(pixelData) {
         this.updateImage(pixelData)
+        this.$root.$emit('imgChange', pixelData)
       }
     }
 
