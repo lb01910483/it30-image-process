@@ -57,3 +57,50 @@ export const contrast = (pixelData, amount) => {
   }
   return pixelData
 }
+
+export const toHsv = (r, g, b) => {
+  let rdif
+  let gdif
+  let bdif
+  let h
+  let s
+
+  const colorR = r / 255
+  const colorG = g / 255
+  const colorB = b / 255
+  const v = Math.max(colorR, colorG, colorB)
+  const diff = v - Math.min(colorR, colorG, colorB)
+  const diffc = c => {
+    return (v - c) / 6 / diff + 1 / 2
+  }
+
+  if (diff === 0) {
+    h = 0
+    s = 0
+  } else {
+    s = diff / v
+    rdif = diffc(colorR)
+    gdif = diffc(colorG)
+    bdif = diffc(colorB)
+
+    if (colorR === v) {
+      h = bdif - gdif
+    } else if (colorG === v) {
+      h = 1 / 3 + rdif - bdif
+    } else if (colorB === v) {
+      h = 2 / 3 + gdif - rdif
+    }
+
+    if (h < 0) {
+      h += 1
+    } else if (h > 1) {
+      h -= 1
+    }
+  }
+
+  return {
+    h: h * 360,
+    s: s * 100,
+    v: v * 100
+  }
+}

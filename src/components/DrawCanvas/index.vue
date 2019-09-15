@@ -69,6 +69,10 @@
         this.updateImage(pixelData)
         this.$root.$emit('imgChange', pixelData)
       }
+    },
+    mounted() {
+      const test = [5, 6, 8]
+      console.log('hsbv', filter.toHsv(test[0], test[1], test[2]))
     }
 
   }
