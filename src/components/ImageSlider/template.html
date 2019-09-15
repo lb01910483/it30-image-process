@@ -6,4 +6,11 @@
     :value="brightness"
     @sliderChange="val => sliderChange(val, 'brightness')"
   ></Slider>
+  <Slider
+    title="對比度"
+    :min="-100"
+    :max="100"
+    :value="contrast"
+    @sliderChange="val => sliderChange(val, 'contrast')"
+  ></Slider>
 </div>

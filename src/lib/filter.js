@@ -46,3 +46,14 @@ export const calculateBrightness = pixelData => {
   })
   return result
 }
+
+export const contrast = (pixelData, amount) => {
+  // const factor = (259 * (amount + 255)) / (255 * (259 - amount))
+  const factor = (350 * (amount + 255)) / (255 * (350 - amount))
+  for (let i = 0; i < pixelData.length; i += 4) {
+    pixelData[i] = factor * (pixelData[i] - 128) + 128
+    pixelData[i + 1] = factor * (pixelData[i + 1] - 128) + 128
+    pixelData[i + 2] = factor * (pixelData[i + 2] - 128) + 128
+  }
+  return pixelData
+}

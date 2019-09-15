@@ -8,7 +8,8 @@
     },
     computed: {
       ...mapState({
-        brightness: state => state.sliderValue.brightness
+        brightness: state => state.sliderValue.brightness,
+        contrast: state => state.sliderValue.contrast,
       })
     },
     methods: {

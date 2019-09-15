@@ -22,8 +22,8 @@
         const result = filter.calculateBrightness(pixelData.data)
         this.echart.setOption({
           xAxis: {
-            min: 0,
-            max: 255,
+            min: -5,
+            max: 260,
             splitLine: {
               show: false
             },
@@ -35,7 +35,10 @@
             }
           },
           yAxis: {
-            show: false
+            show: false,
+            max: function (value) {
+              return value.max / 2
+            }
           },
           grid: {
             left: 0,
