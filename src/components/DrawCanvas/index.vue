@@ -62,7 +62,7 @@
         const ctx = canvas.getContext('2d')
         ctx.drawImage(data.img, 0, 0)
         const pixelData = ctx.getImageData(0, 0, data.width, data.height)
-      },
+      }
     },
     watch: {
       editImageData(pixelData) {
@@ -70,11 +70,7 @@
         this.$root.$emit('imgChange', pixelData)
       }
     },
-    mounted() {
-      const test = [5, 6, 8]
-      console.log('hsbv', filter.toHsv(test[0], test[1], test[2]))
-    }
-
+    mounted() {}
   }
 </script>
 

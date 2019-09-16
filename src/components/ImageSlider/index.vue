@@ -10,14 +10,14 @@
       ...mapState({
         brightness: state => state.sliderValue.brightness,
         contrast: state => state.sliderValue.contrast,
+        saturation: state => state.sliderValue.saturation
       })
     },
     methods: {
       sliderChange(val, key) {
         this.$store.commit('CHANGE_SLIDER_VALUE', { key, val })
       }
-    },
-
+    }
   }
 </script>
 

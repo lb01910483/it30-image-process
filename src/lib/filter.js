@@ -58,7 +58,7 @@ export const contrast = (pixelData, amount) => {
   return pixelData
 }
 
-export const toHsv = (r, g, b) => {
+export const rgbToHsv = (r, g, b) => {
   let rdif
   let gdif
   let bdif
@@ -98,9 +98,50 @@ export const toHsv = (r, g, b) => {
     }
   }
 
-  return {
-    h: h * 360,
-    s: s * 100,
-    v: v * 100
+  return [h * 360, s * 100, v * 100]
+}
+
+export const hsvToRgb = hsv => {
+  const h = hsv[0] / 60
+  const s = hsv[1] / 100
+  let v = hsv[2] / 100
+  const hi = Math.floor(h) % 6
+
+  const f = h - Math.floor(h)
+  const p = 255 * v * (1 - s)
+  const q = 255 * v * (1 - s * f)
+  const t = 255 * v * (1 - s * (1 - f))
+  v *= 255
+
+  switch (hi) {
+    case 0:
+      return [v, t, p]
+    case 1:
+      return [q, v, p]
+    case 2:
+      return [p, v, t]
+    case 3:
+      return [p, q, v]
+    case 4:
+      return [t, p, v]
+    case 5:
+      return [v, p, q]
   }
+}
+
+export const clamp = (input, min, max) => {
+  return Math.min(Math.max(input, min), max)
+}
+
+export const saturation = (pixelData, amount) => {
+  for (let i = 0; i < pixelData.length; i += 4) {
+    let [r, g, b] = [pixelData[i], pixelData[i + 1], pixelData[i + 2]]
+    const hsv = rgbToHsv(r, g, b)
+    hsv[1] = clamp(hsv[1] + amount, 0, 100)
+    const finalRgb = hsvToRgb(hsv)
+    pixelData[i] = finalRgb[0]
+    pixelData[i + 1] = finalRgb[1]
+    pixelData[i + 2] = finalRgb[2]
+  }
+  return pixelData
 }

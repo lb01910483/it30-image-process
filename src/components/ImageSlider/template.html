@@ -13,4 +13,11 @@
     :value="contrast"
     @sliderChange="val => sliderChange(val, 'contrast')"
   ></Slider>
+  <Slider
+    title="飽和度"
+    :min="-100"
+    :max="100"
+    :value="saturation"
+    @sliderChange="val => sliderChange(val, 'saturation')"
+  ></Slider>
 </div>

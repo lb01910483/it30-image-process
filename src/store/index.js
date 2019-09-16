@@ -8,7 +8,8 @@ export default new Vuex.Store({
   state: {
     sliderValue: {
       brightness: 0,
-      contrast: 0
+      contrast: 0,
+      saturation: 0
     },
     originalEditData: {}
   },
@@ -37,6 +38,9 @@ export default new Vuex.Store({
         }
         if (sliderValue.contrast !== 0) {
           filters.contrast(imageDataCopy.data, sliderValue.contrast)
+        }
+        if (sliderValue.saturation !== 0) {
+          filters.saturation(imageDataCopy.data, sliderValue.saturation)
         }
         return imageDataCopy
       }
