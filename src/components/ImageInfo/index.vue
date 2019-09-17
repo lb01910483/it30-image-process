@@ -37,7 +37,7 @@
           yAxis: {
             show: false,
             max: function (value) {
-              return value.max / 2
+              return value.max
             }
           },
           grid: {

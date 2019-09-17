@@ -133,11 +133,21 @@ export const clamp = (input, min, max) => {
   return Math.min(Math.max(input, min), max)
 }
 
+export const convertRange = (value, outputRate) => {
+  const baseRate = [-100, 100]
+  return (
+    ((value - baseRate[0]) * (outputRate[1] - outputRate[0])) /
+      (baseRate[1] - baseRate[0]) +
+    outputRate[0]
+  )
+}
+
 export const saturation = (pixelData, amount) => {
   for (let i = 0; i < pixelData.length; i += 4) {
-    let [r, g, b] = [pixelData[i], pixelData[i + 1], pixelData[i + 2]]
+    const [r, g, b] = [pixelData[i], pixelData[i + 1], pixelData[i + 2]]
     const hsv = rgbToHsv(r, g, b)
     hsv[1] = clamp(hsv[1] + amount, 0, 100)
+    // hsv[1] = clamp(hsv[1] + convertRange(amount, [-20, 20]), 0, 100)
     const finalRgb = hsvToRgb(hsv)
     pixelData[i] = finalRgb[0]
     pixelData[i + 1] = finalRgb[1]
