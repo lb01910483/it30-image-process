@@ -58,16 +58,16 @@ export const contrast = (pixelData, amount) => {
   return pixelData
 }
 
-export const rgbToHsv = (r, g, b) => {
+export const rgbToHsv = rgb => {
   let rdif
   let gdif
   let bdif
   let h
   let s
 
-  const colorR = r / 255
-  const colorG = g / 255
-  const colorB = b / 255
+  const colorR = rgb[0] / 255
+  const colorG = rgb[1] / 255
+  const colorB = rgb[2] / 255
   const v = Math.max(colorR, colorG, colorB)
   const diff = v - Math.min(colorR, colorG, colorB)
   const diffc = c => {
@@ -129,6 +129,93 @@ export const hsvToRgb = hsv => {
   }
 }
 
+export const rgbToHsl = rgb => {
+  const r = rgb[0] / 255
+  const g = rgb[1] / 255
+  const b = rgb[2] / 255
+  const min = Math.min(r, g, b)
+  const max = Math.max(r, g, b)
+  const delta = max - min
+  let h
+  let s
+
+  if (max === min) {
+    h = 0
+  } else if (r === max) {
+    h = (g - b) / delta
+  } else if (g === max) {
+    h = 2 + (b - r) / delta
+  } else if (b === max) {
+    h = 4 + (r - g) / delta
+  }
+
+  h = Math.min(h * 60, 360)
+
+  if (h < 0) {
+    h += 360
+  }
+
+  const l = (min + max) / 2
+
+  if (max === min) {
+    s = 0
+  } else if (l <= 0.5) {
+    s = delta / (max + min)
+  } else {
+    s = delta / (2 - max - min)
+  }
+
+  return [h, s * 100, l * 100]
+}
+
+export const hslToRgb = hsl => {
+  const h = hsl[0] / 360
+  const s = hsl[1] / 100
+  const l = hsl[2] / 100
+  let t2
+  let t3
+  let val
+
+  if (s === 0) {
+    val = l * 255
+    return [val, val, val]
+  }
+
+  if (l < 0.5) {
+    t2 = l * (1 + s)
+  } else {
+    t2 = l + s - l * s
+  }
+
+  const t1 = 2 * l - t2
+
+  const rgb = [0, 0, 0]
+  for (let i = 0; i < 3; i++) {
+    t3 = h + (1 / 3) * -(i - 1)
+    if (t3 < 0) {
+      t3++
+    }
+
+    if (t3 > 1) {
+      t3--
+    }
+
+    if (6 * t3 < 1) {
+      val = t1 + (t2 - t1) * 6 * t3
+    } else if (2 * t3 < 1) {
+      val = t2
+    } else if (3 * t3 < 2) {
+      val = t1 + (t2 - t1) * (2 / 3 - t3) * 6
+    } else {
+      val = t1
+    }
+
+    rgb[i] = val * 255
+  }
+
+  return rgb
+}
+
 export const clamp = (input, min, max) => {
   return Math.min(Math.max(input, min), max)
 }
@@ -145,10 +232,34 @@ export const convertRange = (value, outputRate) => {
 export const saturation = (pixelData, amount) => {
   for (let i = 0; i < pixelData.length; i += 4) {
     const [r, g, b] = [pixelData[i], pixelData[i + 1], pixelData[i + 2]]
-    const hsv = rgbToHsv(r, g, b)
-    hsv[1] = clamp(hsv[1] + amount, 0, 100)
-    // hsv[1] = clamp(hsv[1] + convertRange(amount, [-20, 20]), 0, 100)
-    const finalRgb = hsvToRgb(hsv)
+    // const hsv = rgbToHsv([r, g, b])
+    const hsl = rgbToHsl([r, g, b])
+    // hsv[2] = clamp(hsv[2] + amount, 0, 100)
+    // hsv[1] = clamp(hsv[1] + amount, 0, 100)
+    // hsv[1] = clamp(hsv[1] + convertRange(amount, [-100, 100]), 0, 100)
+
+    // hsv[2] = clamp(hsv[2] + convertRange(amount, [-8, 8]), 0, 100)
+    // const finalRgb = hsvToRgb(hsv)
+    // if (hsl[2] < 33) {
+    //   hsl[2] = clamp(hsl[2] + convertRange(amount, [-10, 10]), 0, 100)
+    // }
+    hsl[1] = clamp(hsl[1] + convertRange(amount, [-100, 100]), 0, 100)
+    const finalRgb = hslToRgb(hsl)
+    pixelData[i] = finalRgb[0]
+    pixelData[i + 1] = finalRgb[1]
+    pixelData[i + 2] = finalRgb[2]
+  }
+  return pixelData
+}
+
+export const vibrance = (pixelData, amount) => {
+  for (let i = 0; i < pixelData.length; i += 4) {
+    const [r, g, b] = [pixelData[i], pixelData[i + 1], pixelData[i + 2]]
+    const hsl = rgbToHsl([r, g, b])
+    if (hsl[1] < 40) {
+      hsl[1] = clamp(hsl[1] + convertRange(amount, [-40, 40]), 0, 40)
+    }
+    const finalRgb = hslToRgb(hsl)
     pixelData[i] = finalRgb[0]
     pixelData[i + 1] = finalRgb[1]
     pixelData[i + 2] = finalRgb[2]

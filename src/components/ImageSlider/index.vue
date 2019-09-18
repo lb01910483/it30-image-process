@@ -10,7 +10,8 @@
       ...mapState({
         brightness: state => state.sliderValue.brightness,
         contrast: state => state.sliderValue.contrast,
-        saturation: state => state.sliderValue.saturation
+        saturation: state => state.sliderValue.saturation,
+        vibrance: state => state.sliderValue.vibrance,
       })
     },
     methods: {

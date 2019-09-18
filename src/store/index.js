@@ -9,7 +9,8 @@ export default new Vuex.Store({
     sliderValue: {
       brightness: 0,
       contrast: 0,
-      saturation: 0
+      saturation: 0,
+      vibrance: 0
     },
     originalEditData: {}
   },
@@ -41,6 +42,9 @@ export default new Vuex.Store({
         }
         if (sliderValue.saturation !== 0) {
           filters.saturation(imageDataCopy.data, sliderValue.saturation)
+        }
+        if (sliderValue.vibrance !== 0) {
+          filters.vibrance(imageDataCopy.data, sliderValue.vibrance)
         }
         return imageDataCopy
       }

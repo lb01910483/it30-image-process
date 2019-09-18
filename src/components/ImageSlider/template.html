@@ -20,4 +20,11 @@
     :value="saturation"
     @sliderChange="val => sliderChange(val, 'saturation')"
   ></Slider>
+  <Slider
+    title="細節飽和度"
+    :min="-100"
+    :max="100"
+    :value="vibrance"
+    @sliderChange="val => sliderChange(val, 'vibrance')"
+  ></Slider>
 </div>
