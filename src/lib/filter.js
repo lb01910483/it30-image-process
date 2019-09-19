@@ -49,11 +49,15 @@ export const calculateBrightness = pixelData => {
 
 export const contrast = (pixelData, amount) => {
   // const factor = (259 * (amount + 255)) / (255 * (259 - amount))
+  const contrastThreshold = 128
   const factor = (350 * (amount + 255)) / (255 * (350 - amount))
   for (let i = 0; i < pixelData.length; i += 4) {
-    pixelData[i] = factor * (pixelData[i] - 128) + 128
-    pixelData[i + 1] = factor * (pixelData[i + 1] - 128) + 128
-    pixelData[i + 2] = factor * (pixelData[i + 2] - 128) + 128
+    pixelData[i] =
+      factor * (pixelData[i] - contrastThreshold) + contrastThreshold
+    pixelData[i + 1] =
+      factor * (pixelData[i + 1] - contrastThreshold) + contrastThreshold
+    pixelData[i + 2] =
+      factor * (pixelData[i + 2] - contrastThreshold) + contrastThreshold
   }
   return pixelData
 }
@@ -253,11 +257,36 @@ export const saturation = (pixelData, amount) => {
 }
 
 export const vibrance = (pixelData, amount) => {
+  const vibranceThreshold = 40
   for (let i = 0; i < pixelData.length; i += 4) {
     const [r, g, b] = [pixelData[i], pixelData[i + 1], pixelData[i + 2]]
     const hsl = rgbToHsl([r, g, b])
-    if (hsl[1] < 40) {
-      hsl[1] = clamp(hsl[1] + convertRange(amount, [-40, 40]), 0, 40)
+    if (hsl[1] < vibranceThreshold) {
+      hsl[1] = clamp(
+        hsl[1] + convertRange(amount, [-40, 40]),
+        0,
+        vibranceThreshold
+      )
+    }
+    const finalRgb = hslToRgb(hsl)
+    pixelData[i] = finalRgb[0]
+    pixelData[i + 1] = finalRgb[1]
+    pixelData[i + 2] = finalRgb[2]
+  }
+  return pixelData
+}
+
+export const shadow = (pixelData, amount) => {
+  const shadowThreshold = 40
+  for (let i = 0; i < pixelData.length; i += 4) {
+    const [r, g, b] = [pixelData[i], pixelData[i + 1], pixelData[i + 2]]
+    const hsl = rgbToHsl([r, g, b])
+    if (hsl[2] < shadowThreshold) {
+      hsl[2] = clamp(
+        hsl[2] + convertRange(amount, [-10, 10]),
+        0,
+        shadowThreshold
+      )
     }
     const finalRgb = hslToRgb(hsl)
     pixelData[i] = finalRgb[0]

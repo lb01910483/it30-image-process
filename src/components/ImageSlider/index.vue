@@ -12,6 +12,7 @@
         contrast: state => state.sliderValue.contrast,
         saturation: state => state.sliderValue.saturation,
         vibrance: state => state.sliderValue.vibrance,
+        shadow: state => state.sliderValue.shadow,
       })
     },
     methods: {

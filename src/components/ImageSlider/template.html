@@ -27,4 +27,11 @@
     :value="vibrance"
     @sliderChange="val => sliderChange(val, 'vibrance')"
   ></Slider>
+  <Slider
+    title="陰影"
+    :min="-100"
+    :max="100"
+    :value="shadow"
+    @sliderChange="val => sliderChange(val, 'shadow')"
+  ></Slider>
 </div>
