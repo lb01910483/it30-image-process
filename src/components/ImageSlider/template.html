@@ -28,10 +28,24 @@
     @sliderChange="val => sliderChange(val, 'vibrance')"
   ></Slider>
   <Slider
-    title="陰影"
+    title="暗部"
     :min="-100"
     :max="100"
     :value="shadow"
     @sliderChange="val => sliderChange(val, 'shadow')"
+  ></Slider>
+  <Slider
+    title="亮部"
+    :min="-100"
+    :max="100"
+    :value="hightLight"
+    @sliderChange="val => sliderChange(val, 'hightLight')"
+  ></Slider>
+  <Slider
+    title="銳利化"
+    :min="-100"
+    :max="100"
+    :value="sharpen"
+    @sliderChange="val => sliderChange(val, 'sharpen')"
   ></Slider>
 </div>

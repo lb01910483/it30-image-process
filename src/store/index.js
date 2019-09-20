@@ -11,7 +11,9 @@ export default new Vuex.Store({
       contrast: 0,
       saturation: 0,
       vibrance: 0,
-      shadow: 0
+      shadow: 0,
+      hightLight: 0,
+      sharpen: 0
     },
     originalEditData: {}
   },
@@ -35,8 +37,7 @@ export default new Vuex.Store({
           originalEditData.width,
           originalEditData.height
         )
-        applyFilters(imageDataCopy, sliderValue)
-        return imageDataCopy
+        return applyFilters(imageDataCopy, sliderValue)
       }
     }
   },

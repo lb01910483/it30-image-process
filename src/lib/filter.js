@@ -26,7 +26,7 @@ export const brightness = (imageData, amount) => {
     pixelData[i + 1] = pixelData[i + 1] + amount // green
     pixelData[i + 2] = pixelData[i + 2] + amount // blue
   }
-  return pixelData
+  return imageData
 }
 export const calculateBrightness = pixelData => {
   const tmp = {}
@@ -61,7 +61,7 @@ export const contrast = (imageData, amount) => {
     pixelData[i + 2] =
       factor * (pixelData[i + 2] - contrastThreshold) + contrastThreshold
   }
-  return pixelData
+  return imageData
 }
 
 export const rgbToHsv = rgb => {
@@ -239,24 +239,14 @@ export const saturation = (imageData, amount) => {
   const pixelData = imageData.data
   for (let i = 0; i < pixelData.length; i += 4) {
     const [r, g, b] = [pixelData[i], pixelData[i + 1], pixelData[i + 2]]
-    // const hsv = rgbToHsv([r, g, b])
     const hsl = rgbToHsl([r, g, b])
-    // hsv[2] = clamp(hsv[2] + amount, 0, 100)
-    // hsv[1] = clamp(hsv[1] + amount, 0, 100)
-    // hsv[1] = clamp(hsv[1] + convertRange(amount, [-100, 100]), 0, 100)
-
-    // hsv[2] = clamp(hsv[2] + convertRange(amount, [-8, 8]), 0, 100)
-    // const finalRgb = hsvToRgb(hsv)
-    // if (hsl[2] < 33) {
-    //   hsl[2] = clamp(hsl[2] + convertRange(amount, [-10, 10]), 0, 100)
-    // }
     hsl[1] = clamp(hsl[1] + convertRange(amount, [-100, 100]), 0, 100)
     const finalRgb = hslToRgb(hsl)
     pixelData[i] = finalRgb[0]
     pixelData[i + 1] = finalRgb[1]
     pixelData[i + 2] = finalRgb[2]
   }
-  return pixelData
+  return imageData
 }
 
 export const vibrance = (imageData, amount) => {
@@ -277,7 +267,7 @@ export const vibrance = (imageData, amount) => {
     pixelData[i + 1] = finalRgb[1]
     pixelData[i + 2] = finalRgb[2]
   }
-  return pixelData
+  return imageData
 }
 
 export const shadow = (imageData, amount) => {
@@ -294,5 +284,140 @@ export const shadow = (imageData, amount) => {
     pixelData[i + 1] = finalRgb[1]
     pixelData[i + 2] = finalRgb[2]
   }
-  return pixelData
+  return imageData
+}
+export const hightLight = (imageData, amount) => {
+  const pixelData = imageData.data
+  const hightLightThreshold = 70
+  for (let i = 0; i < pixelData.length; i += 4) {
+    const [r, g, b] = [pixelData[i], pixelData[i + 1], pixelData[i + 2]]
+    const hsl = rgbToHsl([r, g, b])
+    if (hsl[2] > hightLightThreshold) {
+      hsl[2] = clamp(hsl[2] + convertRange(amount, [-10, 10]), 0, 100)
+    }
+    const finalRgb = hslToRgb(hsl)
+    pixelData[i] = finalRgb[0]
+    pixelData[i + 1] = finalRgb[1]
+    pixelData[i + 2] = finalRgb[2]
+  }
+  return imageData
+}
+
+// export const hightLight = (imageData, amount) => {
+//   const pixelData = imageData.data
+//   const hightLightThreshold = 50
+//   const imageWidth = imageData.width
+//   const imageHeight = imageData.height
+//   const output = new ImageData(
+//     new Uint8ClampedArray(imageData.data),
+//     imageData.width,
+//     imageData.height
+//   )
+//   const range = 3 * 3
+//   const side = Math.sqrt(range)
+//   const half = Math.floor(side / 2)
+//   const outputPixelData = output.data
+
+//   for (let y = 0; y < imageHeight; y++) {
+//     for (let x = 0; x < imageWidth; x++) {
+//       const dstOff = (y * imageWidth + x) * 4
+//       let totalLightness = 0
+//       let total = 0
+//       for (let row = 0; row < side; row++) {
+//         for (let col = 0; col < side; col++) {
+//           // 尋找範圍內座標
+//           const srcY = y + row - half
+//           const srcX = x + col - half
+
+//           // 如果範圍超出，退出 ex 最左上角之點
+//           if (srcY < 0 || srcY > imageHeight || srcX < 0 || srcX > imageWidth) {
+//             continue
+//           }
+
+//           const srcOff = (srcY * imageWidth + srcX) * 4
+//           const [r, g, b] = [
+//             pixelData[srcOff],
+//             pixelData[srcOff + 1],
+//             pixelData[srcOff + 2]
+//           ]
+
+//           const hsl = rgbToHsl([r, g, b])
+//           const lightness = hsl[2]
+//           totalLightness += lightness
+//           total += 1
+//         }
+//       }
+//       const avgLightness = totalLightness / total
+//       if (avgLightness > hightLightThreshold) {
+//         const [r, g, b] = [
+//           outputPixelData[dstOff],
+//           outputPixelData[dstOff + 1],
+//           outputPixelData[dstOff + 2]
+//         ]
+//         const hsl = rgbToHsl([r, g, b])
+//         hsl[2] = clamp(hsl[2] + convertRange(amount, [-10, 10]), 0, 100)
+//         const finalRgb = hslToRgb(hsl)
+//         outputPixelData[dstOff] = finalRgb[0]
+//         outputPixelData[dstOff + 1] = finalRgb[1]
+//         outputPixelData[dstOff + 2] = finalRgb[2]
+//       }
+//     }
+//   }
+
+//   return output
+// }
+
+export const convolve = (imageData, amount, kernel) => {
+  const pixelData = imageData.data
+  const imageWidth = imageData.width
+  const imageHeight = imageData.height
+  const output = new ImageData(
+    new Uint8ClampedArray(imageData.data),
+    imageData.width,
+    imageData.height
+  )
+  const side = Math.sqrt(kernel.length)
+  const half = Math.floor(side / 2)
+  const outputPixelData = output.data
+
+  for (let y = 0; y < imageHeight; y++) {
+    for (let x = 0; x < imageWidth; x++) {
+      const dstOff = (y * imageWidth + x) * 4
+      let totalR = 0
+      let totalG = 0
+      let totalB = 0
+      for (let row = 0; row < side; row++) {
+        for (let col = 0; col < side; col++) {
+          // 尋找範圍內座標
+          const srcY = y + row - half
+          const srcX = x + col - half
+
+          // 如果範圍超出，退出 ex 最左上角之點
+          if (srcY < 0 || srcY > imageHeight || srcX < 0 || srcX > imageWidth) {
+            continue
+          }
+
+          const srcOff = (srcY * imageWidth + srcX) * 4
+          const weight = kernel[row * side + col]
+          const [r, g, b] = [
+            pixelData[srcOff],
+            pixelData[srcOff + 1],
+            pixelData[srcOff + 2]
+          ]
+          totalR += r * weight
+          totalG += g * weight
+          totalB += b * weight
+        }
+      }
+      outputPixelData[dstOff] = totalR
+      outputPixelData[dstOff + 1] = totalG
+      outputPixelData[dstOff + 2] = totalB
+    }
+  }
+  return output
+}
+
+export const sharpen = (imageData, amount) => {
+  const sharpenKernel = [0, -1, 0, -1, 5, -1, 0, -1, 0]
+  return convolve(imageData, amount, sharpenKernel)
 }

@@ -13,6 +13,8 @@
         saturation: state => state.sliderValue.saturation,
         vibrance: state => state.sliderValue.vibrance,
         shadow: state => state.sliderValue.shadow,
+        hightLight: state => state.sliderValue.hightLight,
+        sharpen: state => state.sliderValue.sharpen
       })
     },
     methods: {

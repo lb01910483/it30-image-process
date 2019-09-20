@@ -38,14 +38,16 @@ export const ImageFilters = [
   'contrast',
   'saturation',
   'vibrance',
-  'shadow'
+  'shadow',
+  'hightLight',
+  'sharpen'
 ]
 
 export const applyFilters = (imageData, filtersAmount) => {
   return ImageFilters.reduce((previousValue, currentValue) => {
     const filterAmount = filtersAmount[currentValue]
     if (filterAmount !== 0) {
-      filter[currentValue](previousValue, filterAmount)
+      return filter[currentValue](previousValue, filterAmount)
     }
     return previousValue
   }, imageData)
