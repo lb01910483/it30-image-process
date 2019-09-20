@@ -1,3 +1,5 @@
+import * as filter from './filter'
+
 export const fileLoad = file => {
   return new Promise((resolve, reject) => {
     const reader = new FileReader()
@@ -29,4 +31,22 @@ export const getImageData = async file => {
   } catch (e) {
     console.log(e)
   }
+}
+
+export const ImageFilters = [
+  'brightness',
+  'contrast',
+  'saturation',
+  'vibrance',
+  'shadow'
+]
+
+export const applyFilters = (imageData, filtersAmount) => {
+  return ImageFilters.reduce((previousValue, currentValue) => {
+    const filterAmount = filtersAmount[currentValue]
+    if (filterAmount !== 0) {
+      filter[currentValue](previousValue, filterAmount)
+    }
+    return previousValue
+  }, imageData)
 }

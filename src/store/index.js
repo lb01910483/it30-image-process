@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import * as filters from '../lib/filter'
+import { applyFilters } from '../lib/utils'
 
 Vue.use(Vuex)
 
@@ -35,21 +35,7 @@ export default new Vuex.Store({
           originalEditData.width,
           originalEditData.height
         )
-        if (sliderValue.brightness !== 0) {
-          filters.brightness(imageDataCopy.data, sliderValue.brightness)
-        }
-        if (sliderValue.contrast !== 0) {
-          filters.contrast(imageDataCopy.data, sliderValue.contrast)
-        }
-        if (sliderValue.saturation !== 0) {
-          filters.saturation(imageDataCopy.data, sliderValue.saturation)
-        }
-        if (sliderValue.vibrance !== 0) {
-          filters.vibrance(imageDataCopy.data, sliderValue.vibrance)
-        }
-        if (sliderValue.shadow !== 0) {
-          filters.shadow(imageDataCopy.data, sliderValue.shadow)
-        }
+        applyFilters(imageDataCopy, sliderValue)
         return imageDataCopy
       }
     }

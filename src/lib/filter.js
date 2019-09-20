@@ -18,7 +18,8 @@ export const invert = pixelData => {
   return pixelData
 }
 
-export const brightness = (pixelData, amount) => {
+export const brightness = (imageData, amount) => {
+  const pixelData = imageData.data
   // 每次跳四個索引，也就是一個像素，不處理透明度
   for (let i = 0; i < pixelData.length; i += 4) {
     pixelData[i] = pixelData[i] + amount // red
@@ -47,7 +48,8 @@ export const calculateBrightness = pixelData => {
   return result
 }
 
-export const contrast = (pixelData, amount) => {
+export const contrast = (imageData, amount) => {
+  const pixelData = imageData.data
   // const factor = (259 * (amount + 255)) / (255 * (259 - amount))
   const contrastThreshold = 128
   const factor = (350 * (amount + 255)) / (255 * (350 - amount))
@@ -233,7 +235,8 @@ export const convertRange = (value, outputRate) => {
   )
 }
 
-export const saturation = (pixelData, amount) => {
+export const saturation = (imageData, amount) => {
+  const pixelData = imageData.data
   for (let i = 0; i < pixelData.length; i += 4) {
     const [r, g, b] = [pixelData[i], pixelData[i + 1], pixelData[i + 2]]
     // const hsv = rgbToHsv([r, g, b])
@@ -256,7 +259,8 @@ export const saturation = (pixelData, amount) => {
   return pixelData
 }
 
-export const vibrance = (pixelData, amount) => {
+export const vibrance = (imageData, amount) => {
+  const pixelData = imageData.data
   const vibranceThreshold = 40
   for (let i = 0; i < pixelData.length; i += 4) {
     const [r, g, b] = [pixelData[i], pixelData[i + 1], pixelData[i + 2]]
@@ -276,17 +280,14 @@ export const vibrance = (pixelData, amount) => {
   return pixelData
 }
 
-export const shadow = (pixelData, amount) => {
+export const shadow = (imageData, amount) => {
+  const pixelData = imageData.data
   const shadowThreshold = 40
   for (let i = 0; i < pixelData.length; i += 4) {
     const [r, g, b] = [pixelData[i], pixelData[i + 1], pixelData[i + 2]]
     const hsl = rgbToHsl([r, g, b])
     if (hsl[2] < shadowThreshold) {
-      hsl[2] = clamp(
-        hsl[2] + convertRange(amount, [-10, 10]),
-        0,
-        shadowThreshold
-      )
+      hsl[2] = clamp(hsl[2] + convertRange(amount, [-10, 10]), 0, 100)
     }
     const finalRgb = hslToRgb(hsl)
     pixelData[i] = finalRgb[0]
