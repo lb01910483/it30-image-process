@@ -226,8 +226,7 @@ export const clamp = (input, min, max) => {
   return Math.min(Math.max(input, min), max)
 }
 
-export const convertRange = (value, outputRate) => {
-  const baseRate = [-100, 100]
+export const convertRange = (value, outputRate, baseRate = [-100, 100]) => {
   return (
     ((value - baseRate[0]) * (outputRate[1] - outputRate[0])) /
       (baseRate[1] - baseRate[0]) +
@@ -367,15 +366,17 @@ export const hightLight = (imageData, amount) => {
 //   return output
 // }
 
-export const convolve = (imageData, amount, kernel) => {
+export const convolve = (imageData, kernel, amount) => {
   const pixelData = imageData.data
   const imageWidth = imageData.width
   const imageHeight = imageData.height
+  // 這邊需要複製一份新的資料是因為接下來算權重的時候我們需要用原本的值去做計算，不是已經計算過權重的值
   const output = new ImageData(
     new Uint8ClampedArray(imageData.data),
     imageData.width,
     imageData.height
   )
+  // 尋找單邊長度，矩陣通常為奇數 3 * 3 , 5 * 5 ...
   const side = Math.sqrt(kernel.length)
   const half = Math.floor(side / 2)
   const outputPixelData = output.data
@@ -409,15 +410,51 @@ export const convolve = (imageData, amount, kernel) => {
           totalB += b * weight
         }
       }
-      outputPixelData[dstOff] = totalR
-      outputPixelData[dstOff + 1] = totalG
-      outputPixelData[dstOff + 2] = totalB
+      if (amount) {
+        outputPixelData[dstOff] =
+          totalR * amount + outputPixelData[dstOff] * (1 - amount)
+        outputPixelData[dstOff + 1] =
+          totalG * amount + outputPixelData[dstOff + 1] * (1 - amount)
+        outputPixelData[dstOff + 2] =
+          totalB * amount + outputPixelData[dstOff + 2] * (1 - amount)
+      } else {
+        outputPixelData[dstOff] = totalR
+        outputPixelData[dstOff + 1] = totalG
+        outputPixelData[dstOff + 2] = totalB
+      }
     }
   }
   return output
 }
 
 export const sharpen = (imageData, amount) => {
-  const sharpenKernel = [0, -1, 0, -1, 5, -1, 0, -1, 0]
-  return convolve(imageData, amount, sharpenKernel)
+  if (amount > 0) {
+    const sharpenKernel = [0, -1, 0, -1, 5, -1, 0, -1, 0]
+    const outputRate = [0, 1]
+    const base = [0, 100]
+    return convolve(
+      imageData,
+      sharpenKernel,
+      convertRange(amount, outputRate, base)
+    )
+  } else {
+    const blurKernel = [
+      1 / 9,
+      1 / 9,
+      1 / 9,
+      1 / 9,
+      1 / 9,
+      1 / 9,
+      1 / 9,
+      1 / 9,
+      1 / 9
+    ]
+    const outputRate = [0, 1]
+    const base = [0, 100]
+    return convolve(
+      imageData,
+      blurKernel,
+      convertRange(Math.abs(amount), outputRate, base)
+    )
+  }
 }
