@@ -1,9 +1,8 @@
 <script>
-  import { getImageData } from '../../lib/utils'
-  import * as filter from '../../lib/filter'
+  import { getImageData, applyFilters } from '../../lib/utils'
   import ImageInfo from '../ImageInfo'
   import ImageSlider from '../ImageSlider'
-  import { mapGetters } from 'vuex'
+  import { mapGetters, mapState } from 'vuex'
   export default {
     name: 'DrawCanvas',
     components: {
@@ -14,11 +13,15 @@
       return {
         rgbaInfo: [],
         imgWidth: 0,
-        imgHeight: 0
+        imgHeight: 0,
+        originalData: {}
       }
     },
     computed: {
-      ...mapGetters(['editImageData'])
+      ...mapGetters(['editImageData']),
+      ...mapState({
+        sliderValue: state => state.sliderValue
+      })
     },
     methods: {
       drawImage(imageContent) {
@@ -39,7 +42,7 @@
         this.drawImage(data.img)
         this.imgWidth = data.width
         this.imgHeight = data.height
-        // this.getOriginalData(data)
+        this.originalData = data
       },
       getImageInfo(x, y) {
         const canvas = this.$refs.drawCanvas
@@ -55,13 +58,25 @@
         const context = canvas.getContext('2d')
         context.putImageData(pixelData, 0, 0)
       },
-      getOriginalData(data) {
+      saveImg() {
+        const data = this.originalData
         const canvas = document.createElement('canvas')
         canvas.width = data.width
         canvas.height = data.height
         const ctx = canvas.getContext('2d')
         ctx.drawImage(data.img, 0, 0)
         const pixelData = ctx.getImageData(0, 0, data.width, data.height)
+        const t1 = performance.now()
+        const result = applyFilters(pixelData, this.sliderValue)
+        const t2 = performance.now()
+        ctx.putImageData(pixelData, 0, 0)
+        const dataURL = canvas.toDataURL('image/jpeg').replace('image/jpeg', 'image/octet-stream')
+        console.log('dataURL', dataURL)
+        const link = document.createElement('a')
+        link.download = 'yourname.jpeg'
+        link.href = dataURL
+        link.click()
+
       }
     },
     watch: {
@@ -70,7 +85,7 @@
         this.$root.$emit('imgChange', pixelData)
       }
     },
-    mounted() {}
+    mounted() { }
   }
 </script>
 
