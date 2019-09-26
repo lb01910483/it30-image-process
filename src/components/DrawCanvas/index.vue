@@ -74,17 +74,20 @@
         ctx.putImageData(result, 0, 0)
         canvas.toBlob(
           blob => {
+            console.log(blob)
             const url = URL.createObjectURL(blob)
+            console.log('url', url)
             const link = document.createElement('a')
             link.href = url
-            link.download = 'mypainting.png'
+            link.download = 'yourname.jpeg'
             link.click()
             // 使用完的物件記得手動清除
             URL.revokeObjectURL(url)
-          }
-          // 'image/jpeg',
-          // 1
+          },
+          'image/jpeg',
+          1
         )
+        // 下面這段用法在檔案大時會有問題
         // const dataURL = canvas.toDataURL('image/jpeg')
         // const link = document.createElement('a')
         // link.download = 'yourname.jpeg'
@@ -98,7 +101,7 @@
         this.$root.$emit('imgChange', pixelData)
       }
     },
-    mounted() {}
+    mounted() { }
   }
 </script>
 
