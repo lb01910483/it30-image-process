@@ -8,16 +8,30 @@
         @change="getData"
       />
     </div>
-    <div class="upload_btn" @click="saveImg"  v-show="imgWidth">
-        下載
-      </div>
+    <div
+      class="upload_btn padding"
+      @click="saveImg"
+      v-show="imgWidth"
+    >
+      下載
+    </div>
   </div>
   <div class="image_container">
     <div class="canvas_container">
-      <canvas ref="drawCanvas" @mousemove="handleMouseMove"> </canvas>
+      <canvas
+        ref="drawCanvas"
+        @mousemove="handleMouseMove"
+      > </canvas>
     </div>
-    <div class="image_editor" v-show="imgWidth">
-      <ImageInfo :rgbaInfo="rgbaInfo" :width="imgWidth" :height="imgHeight"  />
+    <div
+      class="image_editor"
+      v-show="imgWidth"
+    >
+      <ImageInfo
+        :rgbaInfo="rgbaInfo"
+        :width="imgWidth"
+        :height="imgHeight"
+      />
       <ImageSlider />
     </div>
   </div>

@@ -66,17 +66,30 @@
         const ctx = canvas.getContext('2d')
         ctx.drawImage(data.img, 0, 0)
         const pixelData = ctx.getImageData(0, 0, data.width, data.height)
+        console.log('original size', pixelData.data.length)
         const t1 = performance.now()
         const result = applyFilters(pixelData, this.sliderValue)
+        console.log('final size', result.data.length)
         const t2 = performance.now()
-        ctx.putImageData(pixelData, 0, 0)
-        const dataURL = canvas.toDataURL('image/jpeg').replace('image/jpeg', 'image/octet-stream')
-        console.log('dataURL', dataURL)
-        const link = document.createElement('a')
-        link.download = 'yourname.jpeg'
-        link.href = dataURL
-        link.click()
-
+        ctx.putImageData(result, 0, 0)
+        canvas.toBlob(
+          blob => {
+            const url = URL.createObjectURL(blob)
+            const link = document.createElement('a')
+            link.href = url
+            link.download = 'mypainting.png'
+            link.click()
+            // 使用完的物件記得手動清除
+            URL.revokeObjectURL(url)
+          }
+          // 'image/jpeg',
+          // 1
+        )
+        // const dataURL = canvas.toDataURL('image/jpeg')
+        // const link = document.createElement('a')
+        // link.download = 'yourname.jpeg'
+        // link.href = dataURL
+        // link.click()
       }
     },
     watch: {
@@ -85,7 +98,7 @@
         this.$root.$emit('imgChange', pixelData)
       }
     },
-    mounted() { }
+    mounted() {}
   }
 </script>
 
