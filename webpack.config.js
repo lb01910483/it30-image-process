@@ -130,6 +130,6 @@ module.exports = {
 
 module.exports = (env, argv) => {
   config.output.publicPath =
-    argv.mode === 'production' ? '/it30-image-process' : '/'
+    argv.mode === 'production' ? '/it30-image-process/' : '/'
   return config
 }
