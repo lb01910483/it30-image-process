@@ -5,7 +5,7 @@
       default-active="/"
     >
       <el-menu-item index="/">
-        <span slot="title">測試</span>
+        <span slot="title">影像濾鏡 - js</span>
       </el-menu-item>
     </el-menu>
   </div>
