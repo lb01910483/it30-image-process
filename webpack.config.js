@@ -11,7 +11,9 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'js/[name].bundle.js',
-    chunkFilename: 'js/[id].chunk.js'
+    chunkFilename: 'js/[id].chunk.js',
+    publicPath:
+      process.env.NODE_ENV === 'production' ? 'it30-image-process' : '/'
   },
   resolve: {
     extensions: ['.js', '.vue'],
