@@ -66,17 +66,14 @@
         const ctx = canvas.getContext('2d')
         ctx.drawImage(data.img, 0, 0)
         const pixelData = ctx.getImageData(0, 0, data.width, data.height)
-        console.log('original size', pixelData.data.length)
         const t1 = performance.now()
         const result = applyFilters(pixelData, this.sliderValue)
-        console.log('final size', result.data.length)
         const t2 = performance.now()
         ctx.putImageData(result, 0, 0)
         canvas.toBlob(
           blob => {
             console.log(blob)
             const url = URL.createObjectURL(blob)
-            console.log('url', url)
             const link = document.createElement('a')
             link.href = url
             link.download = 'yourname.jpeg'

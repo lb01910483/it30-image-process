@@ -20,6 +20,7 @@ export const imgLoad = src => {
 export const getImageData = async file => {
   try {
     const src = await fileLoad(file)
+    console.log('src', src)
     const img = await imgLoad(src)
     const width = img.width
     const height = img.height
@@ -31,6 +32,11 @@ export const getImageData = async file => {
   } catch (e) {
     console.log(e)
   }
+}
+
+export const getImageUrl = file => {
+  const objectURL = URL.createObjectURL(file)
+  return objectURL
 }
 
 export const ImageFilters = [

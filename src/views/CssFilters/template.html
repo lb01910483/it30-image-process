@@ -1,0 +1,27 @@
+<div class="css_filters">
+  <div class="center">
+    <div class="upload_btn">
+      上傳
+      <input
+        type="file"
+        accept="image/jpg,image/jpeg,image/png"
+        @change="getData"
+      />
+    </div>
+  </div>
+  <div class="image_container" v-if="blobSrc">
+    <!-- <figure v-for="cssFilter in cssFilterList">
+      <figcaption>
+        CSS Filter : {{ cssFilter.class }} {{ cssFilter.value }}
+      </figcaption>
+      <img
+        :src="blobSrc"
+        :style="{filter: `${cssFilter.class}${cssFilter.value}`}"
+      />
+    </figure> -->
+    <figure v-for="cssFilter in cssGramList">
+      <figcaption>CSSGram Filter : {{ cssFilter }}</figcaption>
+      <img :src="blobSrc" :class="[cssFilter]" />
+    </figure>
+  </div>
+</div>

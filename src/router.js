@@ -9,6 +9,11 @@ export default new Router({
       path: '/',
       name: 'index',
       component: () => import('./views/Index.vue')
+    },
+    {
+      path: '/cssFilter',
+      name: 'cssFilter',
+      component: () => import('./views/CssFilters/index.vue')
     }
   ]
 })

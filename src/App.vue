@@ -27,6 +27,11 @@
       return {
         showNav: false
       }
+    },
+    watch: {
+      '$route'() {
+        this.showNav = false
+      }
     }
   }
 </script>
