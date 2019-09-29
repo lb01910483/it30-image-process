@@ -7,7 +7,11 @@
     display: flex;
     .image_editor {
       margin: 0px 0px 0px 20px;
-      width: 250px;
+      width: 200px;
+    }
+    .button {
+      width: 100%;
+      margin: 10px 0 0 0;
     }
   }
 }
