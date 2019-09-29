@@ -3,6 +3,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const webpack = require('webpack')
 const WasmPackPlugin = require('@wasm-tool/wasm-pack-plugin')
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
+const CopyWebpackPlugin = require('copy-webpack-plugin')
 const config = {
   entry: {
     polyfill: '@babel/polyfill',
@@ -66,7 +67,8 @@ const config = {
     new HtmlWebpackPlugin({
       template: 'index.html',
       chunksSortMode: 'dependency'
-    })
+    }),
+    new CopyWebpackPlugin([{ from: 'assets', to: 'assets' }])
     // new WasmPackPlugin({
     //   crateDirectory: path.resolve(__dirname, './wasm'),
     //   forceMode: 'production'
