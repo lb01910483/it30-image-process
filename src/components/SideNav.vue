@@ -2,7 +2,7 @@
   <div>
     <el-menu
       :router="true"
-      default-active="/video"
+      :default-active="$route.path"
     >
       <el-menu-item index="/">
         <span slot="title">影像濾鏡 - js</span>
