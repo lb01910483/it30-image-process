@@ -1,6 +1,5 @@
 <div class="video">
   <span v-show="isPlay"> Fps : {{ fps }}</span>
-
   <div class="image_container">
     <video
       src="../../../assets/video.mp4"
@@ -11,7 +10,6 @@
       @play="drawCanvas"
       :style="videoStyle"
     ></video>
-
     <div class="canvas_container">
       <canvas ref="drawCanvas"> </canvas>
     </div>
@@ -20,7 +18,7 @@
       <el-input
         v-model="barrageInput"
         @keyup.enter.native="addBarrage"
-        placeholder="刷一波漢堡"
+        placeholder="大家刷一波"
       ></el-input>
       <el-button @click="addBarrage" class="button">
         送出

@@ -16,7 +16,6 @@
         fps: 0,
         lastCallTime: 0,
         barrage: null,
-        barrageData: [],
         barrageInput: ''
       }
     },
@@ -63,7 +62,7 @@
       const canvas = this.$refs.drawCanvas
       canvas.width = this.width
       canvas.height = this.height
-      this.barrage = new Barrage(canvas, this.barrageData)
+      this.barrage = new Barrage(canvas)
       video.play().then(() => {
         console.log('play video start')
       }).catch((err) => {
