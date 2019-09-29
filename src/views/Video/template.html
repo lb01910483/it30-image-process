@@ -1,21 +1,27 @@
 <div class="video">
+  <span v-show="isPlay"> Fps : {{ fps }}</span>
+
   <div class="image_container">
     <video
       src="../../../assets/video.mp4"
       autoplay
       loop
+      muted
       ref="video"
       @play="drawCanvas"
       :style="videoStyle"
     ></video>
 
+    <div class="canvas_container">
+      <canvas ref="drawCanvas"> </canvas>
+    </div>
     <div class="image_editor" v-show="isPlay">
       <ImageSlider></ImageSlider>
+      <el-input
+        v-model="barrageInput"
+        @keyup.enter.native="addBarrage"
+        placeholder="刷一波漢堡"
+      ></el-input>
     </div>
-  </div>
-  <span v-show="isPlay"> Fps : {{ fps }}</span>
-
-  <div class="canvas_container">
-    <canvas ref="drawCanvas"> </canvas>
   </div>
 </div>
