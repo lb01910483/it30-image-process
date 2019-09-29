@@ -12,7 +12,7 @@
     >
       <i :class="['fas', showNav ? 'fa-times': 'fa-bars']"></i>
     </div>
-    <router-view />
+    <router-view class="child" />
   </div>
 </template>
 
@@ -77,5 +77,8 @@
   }
   .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
     opacity: 0;
+  }
+  .child {
+    margin: 20px 50px;
   }
 </style>

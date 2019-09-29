@@ -1,0 +1,13 @@
+.video {
+  video {
+    // display: none;
+  }
+  .image_container {
+    margin: 20px 0px 0px;
+    display: flex;
+    .image_editor {
+      margin: 0px 0px 0px 20px;
+      width: 200px;
+    }
+  }
+}

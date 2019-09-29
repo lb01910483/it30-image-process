@@ -8,7 +8,6 @@ import store from './store'
 Vue.use(ElementUI)
 Vue.config.productionTip = false
 
-console.log('load success')
 new Vue({
   el: '#app',
   router,

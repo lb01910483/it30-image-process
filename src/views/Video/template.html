@@ -1,0 +1,21 @@
+<div class="video">
+  <div class="image_container">
+    <video
+      src="../../../assets/video.mp4"
+      autoplay
+      loop
+      ref="video"
+      @play="drawCanvas"
+      :style="videoStyle"
+    ></video>
+
+    <div class="image_editor" v-show="isPlay">
+      <ImageSlider></ImageSlider>
+    </div>
+  </div>
+  <span v-show="isPlay"> Fps : {{ fps }}</span>
+
+  <div class="canvas_container">
+    <canvas ref="drawCanvas"> </canvas>
+  </div>
+</div>

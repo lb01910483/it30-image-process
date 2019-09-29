@@ -14,6 +14,11 @@ export default new Router({
       path: '/cssFilter',
       name: 'cssFilter',
       component: () => import('./views/CssFilters/index.vue')
+    },
+    {
+      path: '/video',
+      name: 'video',
+      component: () => import('./views/Video/index.vue')
     }
   ]
 })
