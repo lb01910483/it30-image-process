@@ -53,8 +53,19 @@ export const applyFilters = (imageData, filtersAmount) => {
   return ImageFilters.reduce((previousValue, currentValue) => {
     const filterAmount = filtersAmount[currentValue]
     if (filterAmount !== 0) {
-      return filter[currentValue](previousValue, filterAmount)
+      const result = filter[currentValue](previousValue, filterAmount)
+      return result
     }
     return previousValue
   }, imageData)
+}
+
+export const fib = i => {
+  if (i === 0) return 0
+  if (i === 1) return 1
+  return fib(i - 1) + fib(i - 2)
+}
+
+export default {
+  fib
 }

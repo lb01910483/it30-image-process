@@ -4,6 +4,7 @@ const webpack = require('webpack')
 const WasmPackPlugin = require('@wasm-tool/wasm-pack-plugin')
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
+const WorkerPlugin = require('worker-plugin')
 const config = {
   entry: {
     polyfill: '@babel/polyfill',
@@ -68,7 +69,14 @@ const config = {
       template: 'index.html',
       chunksSortMode: 'dependency'
     }),
-    new CopyWebpackPlugin([{ from: 'assets', to: 'assets' }])
+    new CopyWebpackPlugin([
+      { from: 'assets', to: 'assets' },
+      { from: 'src/lib', to: 'lib' }
+    ]),
+    new WorkerPlugin({
+      // use "self" as the global object when receiving hot updates.
+      globalObject: 'self' // <-- this is the default value
+    })
     // new WasmPackPlugin({
     //   crateDirectory: path.resolve(__dirname, './wasm'),
     //   forceMode: 'production'

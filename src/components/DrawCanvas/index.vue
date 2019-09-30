@@ -66,9 +66,7 @@
         const ctx = canvas.getContext('2d')
         ctx.drawImage(data.img, 0, 0)
         const pixelData = ctx.getImageData(0, 0, data.width, data.height)
-        const t1 = performance.now()
         const result = applyFilters(pixelData, this.sliderValue)
-        const t2 = performance.now()
         ctx.putImageData(result, 0, 0)
         canvas.toBlob(
           blob => {

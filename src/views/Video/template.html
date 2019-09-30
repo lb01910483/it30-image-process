@@ -1,5 +1,10 @@
 <div class="video">
   <span v-show="isPlay"> Fps : {{ fps }}</span>
+  <el-button @click="slowMainThread" class="button" v-show="isPlay">
+    變慢
+  </el-button>
+  <el-checkbox v-model="enableWorker" class="box"> 使用 Worker</el-checkbox>
+  <span v-if="isPlay && fibResult"> Result: {{ fibResult }}</span>
   <div class="image_container">
     <video
       src="../../../assets/video.mp4"

@@ -11,6 +11,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@babel/runtime": "^7.6.2",
     "echarts": "^4.2.1",
     "element-ui": "^2.11.1",
     "vue": "^2.6.10",
@@ -21,6 +22,7 @@
   "devDependencies": {
     "@babel/core": "^7.6.0",
     "@babel/plugin-syntax-dynamic-import": "~7.2",
+    "@babel/plugin-transform-runtime": "^7.6.2",
     "@babel/polyfill": "~7.2",
     "@babel/preset-env": "^7.5.5",
     "@vue/component-compiler-utils": "^3.0.0",
@@ -45,6 +47,7 @@
     "vue-template-compiler": "^2.6.10",
     "webpack": "^4.29.4",
     "webpack-cli": "^3.1.1",
-    "webpack-dev-server": "^3.1.0"
+    "webpack-dev-server": "^3.1.0",
+    "worker-plugin": "^3.2.0"
   }
 }

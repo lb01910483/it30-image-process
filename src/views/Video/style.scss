@@ -1,6 +1,13 @@
 .video {
+  > span {
+    width: 200px;
+    display: inline-block;
+  }
   video {
     display: none;
+  }
+  .box {
+    margin: 0px 10px;
   }
   .image_container {
     margin: 20px 0px 0px;
