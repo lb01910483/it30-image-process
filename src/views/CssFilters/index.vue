@@ -60,7 +60,8 @@
           'kelvin',
           'lark',
           'lofi'
-        ]
+        ],
+        filter: 'cssFilterList'
       }
     },
     methods: {

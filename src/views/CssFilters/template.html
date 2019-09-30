@@ -8,20 +8,28 @@
         @change="getData"
       />
     </div>
+    <div class="radio">
+      <el-radio v-model="filter" label="cssFilterList">原生 CSS </el-radio>
+      <el-radio v-model="filter" label="cssGramList">CSS GRAM</el-radio>
+    </div>
   </div>
   <div class="image_container" v-if="blobSrc">
-    <!-- <figure v-for="cssFilter in cssFilterList">
-      <figcaption>
-        CSS Filter : {{ cssFilter.class }} {{ cssFilter.value }}
-      </figcaption>
-      <img
-        :src="blobSrc"
-        :style="{filter: `${cssFilter.class}${cssFilter.value}`}"
-      />
-    </figure> -->
-    <figure v-for="cssFilter in cssGramList">
-      <figcaption>CSSGram Filter : {{ cssFilter }}</figcaption>
-      <img :src="blobSrc" :class="[cssFilter]" />
-    </figure>
+    <template v-if="filter === 'cssFilterList'">
+      <figure v-for="cssFilter in cssFilterList">
+        <figcaption>
+          CSS Filter : {{ cssFilter.class }} {{ cssFilter.value }}
+        </figcaption>
+        <img
+          :src="blobSrc"
+          :style="{filter: `${cssFilter.class}${cssFilter.value}`}"
+        />
+      </figure>
+    </template>
+    <template v-else>
+      <figure v-for="cssFilter in cssGramList">
+        <figcaption>CSSGram Filter : {{ cssFilter }}</figcaption>
+        <img :src="blobSrc" :class="[cssFilter]" />
+      </figure>
+    </template>
   </div>
 </div>
