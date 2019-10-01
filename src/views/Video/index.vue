@@ -55,7 +55,7 @@
         // ctx.drawImage(video, 0, 0)
         // const pixelData = ctx.getImageData(0, 0, this.width, this.height)
         // worker.postMessage({ 'imageData': pixelData, sliderValue: this.sliderValue })
-        // this.barrage.draw()
+        this.barrage.draw()
         requestAnimationFrame(this.drawCanvas)
       },
       addBarrage() {
@@ -83,11 +83,14 @@
       canvas.height = this.height
       const context = canvas.getContext('2d')
       this.barrage = new Barrage(canvas)
-      video.play().then(() => {
-        console.log('play video start')
-      }).catch((err) => {
-        console.log('play video error', err)
-      })
+      video
+        .play()
+        .then(() => {
+          console.log('play video start')
+        })
+        .catch(err => {
+          console.log('play video error', err)
+        })
       // worker.onmessage = (e) => {
       //   const image = e.data
       //   if (image) {
@@ -98,12 +101,12 @@
       //     context.putImageData(image, 0, 0)
       //   }
       // }
-      worker.onmessage = (e) => {
+      worker.onmessage = e => {
         this.fibResult = e.data
       }
-      worker.onerror = ((ev) => {
+      worker.onerror = ev => {
         console.log('error', ev)
-      })
+      }
     }
   }
 </script>
