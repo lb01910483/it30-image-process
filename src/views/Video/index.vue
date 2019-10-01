@@ -41,21 +41,24 @@
         this.lastCallTime = performance.now()
         const canvas = this.$refs.drawCanvas
         const video = this.$refs.video
-        const context = canvas.getContext('2d')
         this.isPlay = true
-        context.drawImage(video, 0, 0, this.width, this.height)
-        const pixelData = context.getImageData(0, 0, this.width, this.height)
-        const result = applyFilters(pixelData, this.sliderValue)
-        context.putImageData(result, 0, 0)
-        //
-        // const canvas = document.createElement('canvas')
-        // canvas.width = this.width
-        // canvas.height = this.height
-        // const ctx = canvas.getContext('2d')
-        // ctx.drawImage(video, 0, 0)
-        // const pixelData = ctx.getImageData(0, 0, this.width, this.height)
-        // worker.postMessage({ 'imageData': pixelData, sliderValue: this.sliderValue })
-        this.barrage.draw()
+
+
+        this.capture.grabFrame().then(imageBitmap => {
+          worker.postMessage({
+            imageBitmap, sliderValue: this.sliderValue, type: 'process'
+          }, [imageBitmap])
+        }).catch(err => {
+          // console.log('play video error', err)
+        })
+
+
+        // const context = canvas.getContext('2d')
+        // context.drawImage(video, 0, 0, this.width, this.height)
+        // const pixelData = context.getImageData(0, 0, this.width, this.height)
+        // const result = applyFilters(pixelData, this.sliderValue)
+        // context.putImageData(result, 0, 0)
+        // this.barrage.draw()
         requestAnimationFrame(this.drawCanvas)
       },
       addBarrage() {
@@ -81,26 +84,23 @@
       const canvas = this.$refs.drawCanvas
       canvas.width = this.width
       canvas.height = this.height
-      const context = canvas.getContext('2d')
-      this.barrage = new Barrage(canvas)
+      // const context = canvas.getContext('2d')
+      // this.barrage = new Barrage(canvas)
+      const offscreen = canvas.transferControlToOffscreen()
+      worker.postMessage({ offscreen, type: 'init', width: this.width, height: this.height }, [offscreen])
       video
         .play()
         .then(() => {
           console.log('play video start')
+          const stream = video.captureStream(60)
+          const track = stream.getVideoTracks()[0]
+          this.capture = new ImageCapture(track)
+          this.drawCanvas()
+          console.log('set success')
         })
         .catch(err => {
           console.log('play video error', err)
         })
-      // worker.onmessage = (e) => {
-      //   const image = e.data
-      //   if (image) {
-      //     const current = performance.now()
-      //     const fps = 1000 / (current - this.lastCallTime)
-      //     this.fps = fps
-      //     this.lastCallTime = performance.now()
-      //     context.putImageData(image, 0, 0)
-      //   }
-      // }
       worker.onmessage = e => {
         this.fibResult = e.data
       }
