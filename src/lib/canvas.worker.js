@@ -1,18 +1,19 @@
 import { applyFilters, fib } from './utils'
-
+import Barrage from './barrage'
 let canvas
 let context
-let busy = false
 let imageBitmapTmp
 let width
 let height
 let sliderValueTmp
 let play
+let barrage
 const draw = () => {
   context.drawImage(imageBitmapTmp, 0, 0, width, height)
   const pixelData = context.getImageData(0, 0, width, height)
   const result = applyFilters(pixelData, sliderValueTmp)
   context.putImageData(result, 0, 0)
+  barrage.draw()
   requestAnimationFrame(draw)
 }
 
@@ -22,9 +23,8 @@ onmessage = function(e) {
     context = canvas.getContext('2d')
     width = e.data.width
     height = e.data.height
+    barrage = new Barrage({ ctx: context, width, height })
   } else if (e.data.type === 'process' && context) {
-    // console.log('receive')
-    // if (busy) return
     const { imageBitmap, sliderValue } = e.data
 
     imageBitmapTmp = imageBitmap
@@ -33,8 +33,9 @@ onmessage = function(e) {
       play = true
       draw()
     }
-    // this.console.log('fingish')
-    // busy = false
+  } else if (e.data.type === 'barrage' && barrage) {
+    barrage.addBarrage(e.data.data)
+    this.console.log('barrage', barrage)
   }
   // if (e.data.type === 'fib') {
   //   const result = fib(e.data.fibCount)

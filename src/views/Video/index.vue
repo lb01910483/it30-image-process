@@ -19,7 +19,8 @@
         barrage: null,
         barrageInput: '',
         fibResult: 0,
-        enableWorker: false
+        enableOffscreen: false,
+        showCanvas: true
       }
     },
     computed: {
@@ -39,30 +40,47 @@
         const fps = 1000 / (current - this.lastCallTime)
         this.fps = fps
         this.lastCallTime = performance.now()
-        const canvas = this.$refs.drawCanvas
-        const video = this.$refs.video
+
         this.isPlay = true
+        if (this.enableOffscreen) {
+          this.capture
+            .grabFrame()
+            .then(imageBitmap => {
+              worker.postMessage(
+                {
+                  imageBitmap,
+                  sliderValue: this.sliderValue,
+                  type: 'process'
+                },
+                [imageBitmap]
+              )
+            })
+            .catch(err => {
+              // console.log('play video error', err)
+            })
+        } else {
+          const canvas = this.$refs.drawCanvas
+          const video = this.$refs.video
+          const context = canvas.getContext('2d')
+          context.drawImage(video, 0, 0, this.width, this.height)
+          const pixelData = context.getImageData(0, 0, this.width, this.height)
+          const result = applyFilters(pixelData, this.sliderValue)
+          context.putImageData(result, 0, 0)
+          this.barrage.draw()
+        }
 
-
-        this.capture.grabFrame().then(imageBitmap => {
-          worker.postMessage({
-            imageBitmap, sliderValue: this.sliderValue, type: 'process'
-          }, [imageBitmap])
-        }).catch(err => {
-          // console.log('play video error', err)
-        })
-
-
-        // const context = canvas.getContext('2d')
-        // context.drawImage(video, 0, 0, this.width, this.height)
-        // const pixelData = context.getImageData(0, 0, this.width, this.height)
-        // const result = applyFilters(pixelData, this.sliderValue)
-        // context.putImageData(result, 0, 0)
-        // this.barrage.draw()
         requestAnimationFrame(this.drawCanvas)
       },
       addBarrage() {
-        this.barrage.addBarrage({ text: this.barrageInput })
+        if (!this.barrageInput) return
+        if (this.enableOffscreen) {
+          worker.postMessage({
+            data: { text: this.barrageInput },
+            type: 'barrage'
+          })
+        } else {
+          this.barrage.addBarrage({ text: this.barrageInput })
+        }
         this.barrageInput = ''
       },
       slowMainThread() {
@@ -72,22 +90,42 @@
         } else {
           this.fibResult = fib(40)
         }
+      },
+      init() {
+        let cw = window.innerWidth - 800
+        cw = cw < 800 ? 800 : cw
+        const ch = cw * (9 / 16)
+        this.width = cw
+        this.height = ch
+        const canvas = this.$refs.drawCanvas
+        console.log('cavnas', canvas)
+        canvas.width = this.width
+        canvas.height = this.height
+        if (this.enableOffscreen) {
+          const offscreen = canvas.transferControlToOffscreen()
+          worker.postMessage({ offscreen, type: 'init', width: this.width, height: this.height }, [offscreen])
+        } else {
+          const context = canvas.getContext('2d')
+          this.barrage = new Barrage({ ctx: context, width: this.width, height: this.height })
+        }
+      }
+    },
+    watch: {
+      enableOffscreen() {
+        this.showCanvas = false
+        this.$nextTick(() => {
+          this.showCanvas = true
+          this.$nextTick(() => {
+            this.init()
+            this.drawCanvas()
+            console.log('re render')
+          })
+        })
       }
     },
     mounted() {
-      let cw = window.innerWidth - 800
-      cw = cw < 800 ? 800 : cw
-      const ch = cw * (9 / 16)
-      this.width = cw
-      this.height = ch
+      this.init()
       const video = this.$refs.video
-      const canvas = this.$refs.drawCanvas
-      canvas.width = this.width
-      canvas.height = this.height
-      // const context = canvas.getContext('2d')
-      // this.barrage = new Barrage(canvas)
-      const offscreen = canvas.transferControlToOffscreen()
-      worker.postMessage({ offscreen, type: 'init', width: this.width, height: this.height }, [offscreen])
       video
         .play()
         .then(() => {
@@ -96,7 +134,6 @@
           const track = stream.getVideoTracks()[0]
           this.capture = new ImageCapture(track)
           this.drawCanvas()
-          console.log('set success')
         })
         .catch(err => {
           console.log('play video error', err)
