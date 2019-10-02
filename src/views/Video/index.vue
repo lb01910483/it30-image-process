@@ -56,6 +56,7 @@
               )
             })
             .catch(err => {
+              // 目前發現不會每次都成功，似乎跟原本影片 fps 沒有達到有關係
               // console.log('play video error', err)
             })
         } else {
@@ -98,7 +99,6 @@
         this.width = cw
         this.height = ch
         const canvas = this.$refs.drawCanvas
-        console.log('cavnas', canvas)
         canvas.width = this.width
         canvas.height = this.height
         if (this.enableOffscreen) {
@@ -130,7 +130,7 @@
         .play()
         .then(() => {
           console.log('play video start')
-          const stream = video.captureStream(60)
+          const stream = video.captureStream()
           const track = stream.getVideoTracks()[0]
           this.capture = new ImageCapture(track)
           this.drawCanvas()
