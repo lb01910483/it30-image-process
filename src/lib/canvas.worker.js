@@ -1,5 +1,13 @@
 import { applyFilters, fib } from './utils'
 import Barrage from './barrage'
+const wasm = import('../../wasm/pkg')
+wasm
+  .then(m => {
+    console.log('worker load wasm success')
+  })
+  .catch(e => {
+    console.log('worker load wasm fail', e)
+  })
 let canvas
 let context
 let imageBitmapTmp

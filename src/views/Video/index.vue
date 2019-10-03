@@ -3,7 +3,7 @@
   import ImageSlider from '../../components/ImageSlider'
   import { mapGetters, mapState } from 'vuex'
   import Barrage from '../../lib/barrage'
-  const worker = new Worker('../../lib/canvas.worker.js', { type: 'module' })
+  const worker = new Worker('../../lib/canvas.worker.js', { type: 'module', name: 'worker' })
   export default {
     name: 'Video',
     components: {

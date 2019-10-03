@@ -13,7 +13,7 @@ const config = {
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'js/[name].bundle.js',
-    chunkFilename: 'js/[id].chunk.js'
+    chunkFilename: 'js/[id][hash].chunk.js'
   },
   resolve: {
     extensions: ['.js', '.vue'],
@@ -67,7 +67,8 @@ const config = {
     new VueLoaderPlugin(),
     new HtmlWebpackPlugin({
       template: 'index.html',
-      chunksSortMode: 'dependency'
+      // chunksSortMode: 'dependency'
+      chunksSortMode: 'auto'
     }),
     new CopyWebpackPlugin([
       { from: 'assets', to: 'assets' },
@@ -76,11 +77,11 @@ const config = {
     new WorkerPlugin({
       // use "self" as the global object when receiving hot updates.
       globalObject: 'self' // <-- this is the default value
+    }),
+    new WasmPackPlugin({
+      crateDirectory: path.resolve(__dirname, './wasm'),
+      forceMode: 'production'
     })
-    // new WasmPackPlugin({
-    //   crateDirectory: path.resolve(__dirname, './wasm'),
-    //   forceMode: 'production'
-    // }),
     // // Have this example work in Edge which doesn't ship `TextEncoder` or
     // // `TextDecoder` at this time.
     // new webpack.ProvidePlugin({
