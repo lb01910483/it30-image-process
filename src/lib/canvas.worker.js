@@ -8,7 +8,18 @@ let height
 let sliderValueTmp
 let play
 let barrage
+let tmpFps = 0
+let tmpCount = 0
+let lastCallTime = 0
 const draw = () => {
+  const current = performance.now()
+  const fps = 1000 / (current - lastCallTime)
+  // tmpFps += fps
+  // tmpCount += 1
+  // if (tmpCount === 100) {
+  //   console.log('avg', tmpFps / tmpCount)
+  // }
+  lastCallTime = performance.now()
   context.drawImage(imageBitmapTmp, 0, 0, width, height)
   const pixelData = context.getImageData(0, 0, width, height)
   const result = applyFilters(pixelData, sliderValueTmp)

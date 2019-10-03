@@ -20,7 +20,9 @@
         barrageInput: '',
         fibResult: 0,
         enableOffscreen: false,
-        showCanvas: true
+        showCanvas: true,
+        tmpFps: 0,
+        tmpCount: 0
       }
     },
     computed: {
@@ -39,8 +41,12 @@
         const current = performance.now()
         const fps = 1000 / (current - this.lastCallTime)
         this.fps = fps
+        // this.tmpFps += fps
+        // this.tmpCount += 1
+        // if (this.tmpCount === 100) {
+        //   console.log('avg', this.tmpFps / this.tmpCount)
+        // }
         this.lastCallTime = performance.now()
-
         this.isPlay = true
         if (this.enableOffscreen) {
           this.capture
@@ -118,7 +124,6 @@
           this.$nextTick(() => {
             this.init()
             this.drawCanvas()
-            console.log('re render')
           })
         })
       }
