@@ -129,20 +129,25 @@
       }
     },
     mounted() {
-      this.init()
+      // this.init()
       const video = this.$refs.video
-      video
-        .play()
-        .then(() => {
-          console.log('play video start')
-          const stream = video.captureStream()
-          const track = stream.getVideoTracks()[0]
-          this.capture = new ImageCapture(track)
-          this.drawCanvas()
-        })
-        .catch(err => {
-          console.log('play video error', err)
-        })
+      const t1 = performance.now()
+      // fib(43)
+      // this.$wasm.fib(43)
+      const t2 = performance.now()
+      console.log('time', (t2 - t1) / 1000)
+      // video
+      //   .play()
+      //   .then(() => {
+      //     console.log('play video start')
+      //     const stream = video.captureStream()
+      //     const track = stream.getVideoTracks()[0]
+      //     this.capture = new ImageCapture(track)
+      //     this.drawCanvas()
+      //   })
+      //   .catch(err => {
+      //     console.log('play video error', err)
+      //   })
       worker.onmessage = e => {
         this.fibResult = e.data
       }

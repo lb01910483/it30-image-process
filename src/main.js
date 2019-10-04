@@ -10,8 +10,8 @@ Vue.config.productionTip = false
 
 // wasm
 //   .then(m => {
-console.log('load wasm success')
-// Vue.prototype.$wasm = m
+//     console.log('load wasm success')
+//     Vue.prototype.$wasm = m
 new Vue({
   el: '#app',
   router,

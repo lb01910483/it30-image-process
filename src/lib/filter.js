@@ -1,3 +1,14 @@
+const wasm = import('../../wasm/pkg')
+let wasmModule
+wasm
+  .then(m => {
+    console.log('load wasm success on util')
+    wasmModule = m
+  })
+  .catch(e => {
+    console.log('wasm load error', e)
+  })
+
 export const grayscale = pixelData => {
   for (let i = 0; i < pixelData.length; i += 4) {
     const avg = (pixelData[i] + pixelData[i + 1] + pixelData[i + 2]) / 3

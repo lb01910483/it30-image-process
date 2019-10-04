@@ -1,16 +1,15 @@
 
-use wasm_bindgen::prelude::*;
-
 extern crate wasm_bindgen;
 
 extern crate console_error_panic_hook;
 
+use wasm_bindgen::prelude::*;
+
+use web_sys::{ ImageData, console };
+
 use std::panic;
 
-// #[macro_use]
-// extern crate serde_derive;
 
-use wasm_bindgen::prelude::*;
 
 #[cfg(feature = "wee_alloc")]
 #[global_allocator]
@@ -98,4 +97,84 @@ pub fn fib(i: u32) -> u32 {
 //     };
 
 //     JsValue::from_serde(&example).unwrap()
+// }
+
+
+macro_rules! log {
+    ( $( $t:tt )* ) => {
+        console::log_1(&format!( $( $t )* ).into());
+    }
+}
+
+// }
+#[wasm_bindgen]
+     pub fn convolve(val: ImageData, kernel: &[i8], amount: i8) -> () {
+         panic::set_hook(Box::new(console_error_panic_hook::hook));
+       log!("{}", val.height())
+        //  const imageWidth = v
+        // panic::set_hook(Box::new(console_error_panic_hook::hook));
+
+        // va
+    }
+
+
+// export const convolve = (imageData, kernel, amount) => {
+//   const pixelData = imageData.data
+//   const imageWidth = imageData.width
+//   const imageHeight = imageData.height
+//   // 這邊需要複製一份新的資料是因為接下來算權重的時候我們需要用原本的值去做計算，不是已經計算過權重的值
+//   const output = new ImageData(
+//     new Uint8ClampedArray(imageData.data),
+//     imageData.width,
+//     imageData.height
+//   )
+//   // 尋找單邊長度，矩陣通常為奇數 3 * 3 , 5 * 5 ...
+//   const side = Math.sqrt(kernel.length)
+//   const half = Math.floor(side / 2)
+//   const outputPixelData = output.data
+
+//   for (let y = 0; y < imageHeight; y++) {
+//     for (let x = 0; x < imageWidth; x++) {
+//       const dstOff = (y * imageWidth + x) * 4
+//       let totalR = 0
+//       let totalG = 0
+//       let totalB = 0
+//       for (let row = 0; row < side; row++) {
+//         for (let col = 0; col < side; col++) {
+//           // 尋找範圍內座標
+//           const srcY = y + row - half
+//           const srcX = x + col - half
+
+//           // 如果範圍超出，退出 ex 最左上角之點
+//           if (srcY < 0 || srcY > imageHeight || srcX < 0 || srcX > imageWidth) {
+//             continue
+//           }
+
+//           const srcOff = (srcY * imageWidth + srcX) * 4
+//           const weight = kernel[row * side + col]
+//           const [r, g, b] = [
+//             pixelData[srcOff],
+//             pixelData[srcOff + 1],
+//             pixelData[srcOff + 2]
+//           ]
+//           totalR += r * weight
+//           totalG += g * weight
+//           totalB += b * weight
+//         }
+//       }
+//       if (amount) {
+//         outputPixelData[dstOff] =
+//           totalR * amount + outputPixelData[dstOff] * (1 - amount)
+//         outputPixelData[dstOff + 1] =
+//           totalG * amount + outputPixelData[dstOff + 1] * (1 - amount)
+//         outputPixelData[dstOff + 2] =
+//           totalB * amount + outputPixelData[dstOff + 2] * (1 - amount)
+//       } else {
+//         outputPixelData[dstOff] = totalR
+//         outputPixelData[dstOff + 1] = totalG
+//         outputPixelData[dstOff + 2] = totalB
+//       }
+//     }
+//   }
+//   return output
 // }
