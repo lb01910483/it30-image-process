@@ -3,6 +3,7 @@ import Barrage from './barrage'
 const wasm = import('../../wasm/pkg')
 wasm
   .then(m => {
+    console.log('m', m)
     console.log('worker load wasm success')
   })
   .catch(e => {
