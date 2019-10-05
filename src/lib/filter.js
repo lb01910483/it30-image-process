@@ -405,11 +405,17 @@ export const convolve = (imageData, kernel, amount) => {
           const srcX = x + col - half
 
           // 如果範圍超出，退出 ex 最左上角之點
-          if (srcY < 0 || srcY > imageHeight || srcX < 0 || srcX > imageWidth) {
+          if (
+            srcY < 0 ||
+            srcY >= imageHeight ||
+            srcX < 0 ||
+            srcX >= imageWidth
+          ) {
             continue
           }
 
           const srcOff = (srcY * imageWidth + srcX) * 4
+
           const weight = kernel[row * side + col]
           const [r, g, b] = [
             pixelData[srcOff],
@@ -443,11 +449,40 @@ export const sharpen = (imageData, amount) => {
     const sharpenKernel = [0, -1, 0, -1, 5, -1, 0, -1, 0]
     const outputRate = [0, 1]
     const base = [0, 100]
-    return convolve(
-      imageData,
+    const newImage = new ImageData(
+      new Uint8ClampedArray([
+        150,
+        156,
+        82,
+        100,
+        20,
+        20,
+        30,
+        100,
+        255,
+        255,
+        255,
+        255,
+        105,
+        105,
+        105,
+        255
+      ]),
+      4,
+      1
+    )
+    const result = wasmModule.convolve(
+      newImage,
       sharpenKernel,
       convertRange(amount, outputRate, base)
     )
+    console.log('result', result)
+    return result
+    // return convolve(
+    //   imageData,
+    //   sharpenKernel,
+    //   convertRange(amount, outputRate, base)
+    // )
   } else {
     const blurKernel = [
       1 / 9,

@@ -5,9 +5,14 @@ extern crate console_error_panic_hook;
 
 use wasm_bindgen::prelude::*;
 
+use wasm_bindgen::Clamped;
+
 use web_sys::{ ImageData, console };
 
 use std::panic;
+
+
+use js_sys::Math:: { sqrt, floor };
 
 
 
@@ -105,15 +110,58 @@ macro_rules! log {
         console::log_1(&format!( $( $t )* ).into());
     }
 }
-
-// }
 #[wasm_bindgen]
-     pub fn convolve(val: ImageData, kernel: &[i8], amount: i8) -> () {
+     pub fn convolve(val: ImageData, kernel: &[u8], amount: u8) -> (web_sys::ImageData) {
          panic::set_hook(Box::new(console_error_panic_hook::hook));
-       log!("{}", val.height())
-        //  const imageWidth = v
-        // panic::set_hook(Box::new(console_error_panic_hook::hook));
-
+         let imageHeight: u32 = val.height();
+         let imageWidth: u32 = val.width();
+         let pixelData  = val.data();
+         let side: u32 = sqrt(kernel.len() as f64) as u32;
+        //  let side: u32 = kernel.len() as u32;
+         let half: u32 = floor((side / 2).into()) as u32;
+         let outputPixelData = Clamped<&[u8]>;
+         for y in 0..imageHeight {
+             for x in 0..imageWidth {
+                 let dstOff = (y * imageWidth + x) * 4;
+                 let mut totalR = 0;
+                 let mut totalG = 0;
+                 let mut totalB = 0;
+                 for row in 0..side {
+                     for col in 0..side {
+                         let srcY = y + row - half;
+                         let srcX = x + col - half;
+                         if srcY < 0 || srcY >= imageHeight || srcX < 0 || srcX >= imageWidth {
+                                continue
+                         }
+                        let srcOff = (srcY * imageWidth + srcX) * 4;
+                        let weight = kernel[(row * side + col) as usize];
+                        let [r, g, b] = [
+                        pixelData[srcOff as usize],
+                        pixelData[(srcOff + 1) as usize],
+                        pixelData[(srcOff + 2) as usize]
+                        ];
+                        totalR += r * weight;
+                        totalG += g * weight;
+                        totalB += b * weight;
+                     }
+                 }
+                if amount > 0 {
+                    outputPixelData[dstOff as usize] =
+                        totalR * amount + outputPixelData[dstOff as usize] * (1 - amount);
+                    outputPixelData[(dstOff + 1) as usize] =
+                        totalG * amount + outputPixelData[(dstOff + 1) as usize] * (1 - amount);
+                    outputPixelData[(dstOff + 2) as usize] =
+                        totalB * amount + outputPixelData[(dstOff + 2) as usize] * (1 - amount);
+                    } else {
+                    outputPixelData[dstOff as usize] = totalR;
+                    outputPixelData[(dstOff + 1) as usize] = totalG;
+                    outputPixelData[(dstOff + 2) as usize] = totalB;
+                }
+             }
+         }
+         log!("final : {:?}", outputPixelData);
+         let result: ImageData = ImageData::new_with_u8_clamped_array_and_sh(outputPixelData, imageWidth, imageHeight);
+         return result
         // va
     }
 
