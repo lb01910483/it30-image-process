@@ -80,8 +80,7 @@ const config = {
     }),
     new WasmPackPlugin({
       crateDirectory: path.resolve(__dirname, './wasm'),
-      forceMode: 'production',
-      outName: 'index'
+      forceMode: 'production'
     })
     // // Have this example work in Edge which doesn't ship `TextEncoder` or
     // // `TextDecoder` at this time.

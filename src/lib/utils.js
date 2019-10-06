@@ -49,11 +49,21 @@ export const ImageFilters = [
   'sharpen'
 ]
 
+// let tmp = 0
+// let tmpCount = 0
+
 export const applyFilters = (imageData, filtersAmount) => {
   return ImageFilters.reduce((previousValue, currentValue) => {
     const filterAmount = filtersAmount[currentValue]
     if (filterAmount !== 0) {
+      // const t1 = performance.now()
       const result = filter[currentValue](previousValue, filterAmount)
+      // const t2 = performance.now()
+      // tmp += t2 - t1
+      // tmpCount += 1
+      // if (tmpCount === 200) {
+      //   console.log('avg', tmp / tmpCount)
+      // }
       return result
     }
     return previousValue
