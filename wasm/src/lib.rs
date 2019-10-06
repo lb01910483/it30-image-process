@@ -37,16 +37,6 @@ pub fn fib(i: u32) -> u32 {
 //     }
 // }
 
-fn clamp(input: f32, min: f32, max: f32) -> u8 {
-    if input > max {
-    max as u8
-}
-else if input < min {
-    min as u8
-} else {
-    input as u8
-}
-}
 
 #[wasm_bindgen]
      pub fn convolve(val: ImageData, kernel: &[i16], amount: f32) -> std::result::Result<web_sys::ImageData, wasm_bindgen::JsValue>{
@@ -94,3 +84,15 @@ else if input < min {
          }
          ImageData::new_with_u8_clamped_array_and_sh(Clamped(&mut outputPixelData), imageWidth, imageHeight)
     }
+
+
+fn clamp(input: f32, min: f32, max: f32) -> u8 {
+    if input > max {
+    max as u8
+}
+else if input < min {
+    min as u8
+} else {
+    input as u8
+}
+}

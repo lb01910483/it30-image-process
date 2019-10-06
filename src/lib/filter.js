@@ -1,13 +1,13 @@
-const wasm = import('../../wasm/pkg')
-let wasmModule
-wasm
-  .then(m => {
-    console.log('load wasm success on util')
-    wasmModule = m
-  })
-  .catch(e => {
-    console.log('wasm load error', e)
-  })
+// const wasm = import('../../wasm/pkg')
+// let wasmModule
+// wasm
+//   .then(m => {
+//     console.log('load wasm success on util')
+//     wasmModule = m
+//   })
+//   .catch(e => {
+//     console.log('wasm load error', e)
+//   })
 
 export const grayscale = pixelData => {
   for (let i = 0; i < pixelData.length; i += 4) {
@@ -386,18 +386,17 @@ export const sharpen = (imageData, amount) => {
     const sharpenKernel = [0, -1, 0, -1, 5, -1, 0, -1, 0]
     const outputRate = [0, 1]
     const base = [0, 100]
-    const wasmResult = wasmModule.convolve(
-      imageData,
-      sharpenKernel,
-      convertRange(Math.abs(amount), outputRate, base)
-    )
-    // return result
-    // return convolve(
+    // const wasmResult = wasmModule.convolve(
     //   imageData,
     //   sharpenKernel,
-    //   convertRange(amount, outputRate, base)
+    //   convertRange(Math.abs(amount), outputRate, base)
     // )
-    return wasmResult
+    return convolve(
+      imageData,
+      sharpenKernel,
+      convertRange(amount, outputRate, base)
+    )
+    // return wasmResult
   } else {
     const blurKernel = [
       1 / 9,
