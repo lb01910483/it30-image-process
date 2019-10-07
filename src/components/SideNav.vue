@@ -13,6 +13,9 @@
       <el-menu-item index="/video">
         <span slot="title">影片播放</span>
       </el-menu-item>
+      <el-menu-item index="/imageEditor">
+        <span slot="title">梗圖編輯器</span>
+      </el-menu-item>
     </el-menu>
   </div>
 </template>

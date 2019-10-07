@@ -42,7 +42,7 @@ const config = {
         use: ['vue-style-loader', 'css-loader', 'sass-loader']
       },
       {
-        test: /\.(eot|svg|ttf|woff|woff2)$/,
+        test: /\.(eot|svg|ttf|woff|woff2|jpg|png)$/,
         loader: 'file-loader'
       },
       {
