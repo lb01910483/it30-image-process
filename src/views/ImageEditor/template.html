@@ -3,6 +3,8 @@
     <canvas ref="drawCanvas"> </canvas>
   </div>
   <div class="editor">
-
+    <div v-for="item in editTexts">
+      <el-input v-model="item.text" @input="render"></el-input>
+    </div>
   </div>
 </div>

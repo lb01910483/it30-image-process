@@ -7,7 +7,8 @@
       return {
         width: 0,
         height: 0,
-        fabricCanvas: null
+        fabricCanvas: null,
+        editTexts: []
       }
     },
     methods: {
@@ -22,17 +23,26 @@
           const oImg = img.set({
             left: 0,
             width: this.width,
-            height: this.height
+            height: this.height,
+            hoverCursor: 'default',
+            selectable: false
           })
           this.fabricCanvas.add(oImg) // 記得還是要加進 canvas 才會顯示出來呦
           this.fabricCanvas.sendToBack(oImg)
         })
       },
+      render() {
+        this.fabricCanvas.renderAll()
+      },
       addText() {
         const editText = new fabric.IText('點擊編輯', {
-          fill: 'white',
-          stroke: 'black'
+          fill: '#ffffff',
+          stroke: '#000000',
+          fontSize: 40,
+          fontFamily: 'Microsoft JhengHei, PMingLiU, sans-serif'
         })
+
+        this.editTexts.push(editText)
         this.fabricCanvas.add(editText)
       }
     },
