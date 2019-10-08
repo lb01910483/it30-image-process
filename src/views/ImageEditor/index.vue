@@ -6,38 +6,67 @@
     data() {
       return {
         width: 0,
-        height: 0
+        height: 0,
+        fabricCanvas: null
+      }
+    },
+    methods: {
+      loadImg() {
+        fabric.Image.fromURL(img1, img => {
+          const maxWidth = 600
+          const scale = maxWidth / img.width
+          this.height = scale * img.height
+          this.width = scale * img.width
+          this.fabricCanvas.setHeight(this.height)
+          this.fabricCanvas.setWidth(this.width)
+          const oImg = img.set({
+            left: 0,
+            width: this.width,
+            height: this.height
+          })
+          this.fabricCanvas.add(oImg) // 記得還是要加進 canvas 才會顯示出來呦
+          this.fabricCanvas.sendToBack(oImg)
+        })
+      },
+      addText() {
+        const editText = new fabric.IText('點擊編輯', {
+          fill: 'white',
+          stroke: 'black'
+        })
+        this.fabricCanvas.add(editText)
       }
     },
     mounted() {
-      let cw = window.innerWidth - 800
-      cw = cw < 800 ? 800 : cw
-      const ch = cw * (9 / 16)
-      this.width = cw
-      this.height = ch
       const canvas = this.$refs.drawCanvas
-      canvas.width = this.width
-      canvas.height = this.height
-      console.log('fabric', fabric)
-      const fabricCanvas = new fabric.Canvas(canvas)
-      fabric.Image.fromURL(img1, img => {
-        console.log('img', img)
-        const oImg = img.set({
-          left: 0
-          // top: 100
-          // angle: 15,
-          // width: 500,
-          // height: 500
-        })
-        fabricCanvas.add(oImg) // 記得還是要加進 canvas 才會顯示出來呦
+      this.fabricCanvas = new fabric.Canvas(canvas)
+      this.fabricCanvas.on('object:moving', e => {
+        let obj = e.target
+        let boundingRect = obj.getBoundingRect(true)
+        // console.log('boundingRect', boundingRect)
+        // if (boundingRect.left < 0 || boundingRect.left + boundingRect.width > this.width || boundingRect.top < 0) {
+        //   obj.top = obj._stateProperties.top
+        //   obj.left = obj._stateProperties.left
+        //   obj.setCoords()
+        //   obj.saveState()
+        // }
+        obj.setCoords()
+        console.log('moving')
+        // top-left  corner
+        if (boundingRect.top < 0 || boundingRect.left < 0) {
+          obj.top = Math.max(obj.top, obj.top - boundingRect.top)
+          obj.left = Math.max(obj.left, obj.left - boundingRect.left)
+        }
+        // bot-right corner
+        if (
+          boundingRect.top + boundingRect.height > obj.canvas.height ||
+          boundingRect.left + boundingRect.width > obj.canvas.width
+        ) {
+          obj.top = Math.min(obj.top, obj.canvas.height - boundingRect.height + obj.top - boundingRect.top)
+          obj.left = Math.min(obj.left, obj.canvas.width - boundingRect.width + obj.left - boundingRect.left)
+        }
       })
-      const editText = new fabric.IText('雙擊我編輯', {
-        // top: 400,
-        // left: 400
-      })
-      fabricCanvas.add(editText)
-      editText.text = '騙你的'
-      console.log('editText', editText)
+      this.loadImg()
+      this.addText()
     }
   }
 </script>

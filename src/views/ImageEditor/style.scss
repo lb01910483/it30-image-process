@@ -1,4 +1,8 @@
 .image_editor {
   max-width: 1200px;
   margin: 50px auto;
+  display: flex;
+  .canvas_container {
+    width: 600px;
+  }
 }
