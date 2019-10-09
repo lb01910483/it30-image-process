@@ -1,6 +1,6 @@
 <script>
-  import img1 from '../../../assets/Ill-Just-Wait-Here.jpg'
   import { fabric } from 'fabric'
+  import { getImageUrl } from '../../lib/utils'
   export default {
     name: 'ImageEditor',
     data() {
@@ -8,12 +8,19 @@
         width: 0,
         height: 0,
         fabricCanvas: null,
-        editTexts: []
+        editTexts: [],
+        currentIndex: 0,
+        memes: []
       }
     },
     methods: {
-      loadImg() {
-        fabric.Image.fromURL(img1, img => {
+      cleanAll() {
+        this.fabricCanvas.clear()
+        this.editTexts = []
+      },
+      loadImg(path) {
+        this.cleanAll()
+        fabric.Image.fromURL(path, img => {
           const maxWidth = 600
           const scale = maxWidth / img.width
           this.height = scale * img.height
@@ -22,12 +29,14 @@
           this.fabricCanvas.setWidth(this.width)
           const oImg = img.set({
             left: 0,
-            width: this.width,
-            height: this.height,
             hoverCursor: 'default',
             selectable: false
           })
-          this.fabricCanvas.add(oImg) // 記得還是要加進 canvas 才會顯示出來呦
+          oImg.scaleToHeight(this.height)
+          oImg.scaleToWidth(this.width)
+          this.fabricCanvas.add(oImg)
+          this.addText()
+          // 讓圖片一直在最底層 不會影響到字的顯示
           this.fabricCanvas.sendToBack(oImg)
         })
       },
@@ -44,39 +53,48 @@
 
         this.editTexts.push(editText)
         this.fabricCanvas.add(editText)
+      },
+      getData(event) {
+        const file = event.target.files[0]
+        this.loadImg(getImageUrl(file))
+      },
+      loadCurrentImg() {
+        this.cleanAll()
+        const currentFile = this.memes[this.currentIndex]
+        this.loadImg(currentFile.url)
+      },
+      getRandomIndex() {
+        this.currentIndex = Math.floor(Math.random() * 100)
+        this.loadCurrentImg()
+      },
+      getMemesJson() {
+        return fetch('https://api.imgflip.com/get_memes').then(response => response.json())
       }
     },
-    mounted() {
+    async mounted() {
+      const result = await this.getMemesJson()
+      this.memes = result.data.memes
       const canvas = this.$refs.drawCanvas
       this.fabricCanvas = new fabric.Canvas(canvas)
       this.fabricCanvas.on('object:moving', e => {
         let obj = e.target
-        let boundingRect = obj.getBoundingRect(true)
-        // console.log('boundingRect', boundingRect)
-        // if (boundingRect.left < 0 || boundingRect.left + boundingRect.width > this.width || boundingRect.top < 0) {
-        //   obj.top = obj._stateProperties.top
-        //   obj.left = obj._stateProperties.left
-        //   obj.setCoords()
-        //   obj.saveState()
-        // }
+        let { top, left, width, height } = obj.getBoundingRect()
         obj.setCoords()
-        console.log('moving')
-        // top-left  corner
-        if (boundingRect.top < 0 || boundingRect.left < 0) {
-          obj.top = Math.max(obj.top, obj.top - boundingRect.top)
-          obj.left = Math.max(obj.left, obj.left - boundingRect.left)
+        if (top < 0) {
+          obj.top = 0
         }
-        // bot-right corner
-        if (
-          boundingRect.top + boundingRect.height > obj.canvas.height ||
-          boundingRect.left + boundingRect.width > obj.canvas.width
-        ) {
-          obj.top = Math.min(obj.top, obj.canvas.height - boundingRect.height + obj.top - boundingRect.top)
-          obj.left = Math.min(obj.left, obj.canvas.width - boundingRect.width + obj.left - boundingRect.left)
+        if (top + height > this.height) {
+          obj.top = this.height - height
         }
+        if (left < 0) {
+          obj.left = 0
+        }
+        if (left + width > this.width) {
+          obj.left = this.width - width
+        }
+        this.fabricCanvas.renderAll()
       })
-      this.loadImg()
-      this.addText()
+      this.loadCurrentImg()
     }
   }
 </script>
