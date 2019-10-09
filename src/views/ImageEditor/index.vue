@@ -20,25 +20,31 @@
       },
       loadImg(path) {
         this.cleanAll()
-        fabric.Image.fromURL(path, img => {
-          const maxWidth = 600
-          const scale = maxWidth / img.width
-          this.height = scale * img.height
-          this.width = scale * img.width
-          this.fabricCanvas.setHeight(this.height)
-          this.fabricCanvas.setWidth(this.width)
-          const oImg = img.set({
-            left: 0,
-            hoverCursor: 'default',
-            selectable: false
-          })
-          oImg.scaleToHeight(this.height)
-          oImg.scaleToWidth(this.width)
-          this.fabricCanvas.add(oImg)
-          this.addText()
-          // 讓圖片一直在最底層 不會影響到字的顯示
-          this.fabricCanvas.sendToBack(oImg)
-        })
+        fabric.Image.fromURL(
+          path,
+          img => {
+            const maxWidth = 600
+            const scale = maxWidth / img.width
+            this.height = scale * img.height
+            this.width = scale * img.width
+            this.fabricCanvas.setHeight(this.height)
+            this.fabricCanvas.setWidth(this.width)
+            const oImg = img.set({
+              left: 0,
+              hoverCursor: 'default',
+              selectable: false
+            })
+            oImg.scaleToHeight(this.height)
+            oImg.scaleToWidth(this.width)
+            this.fabricCanvas.add(oImg)
+            this.addText()
+            // 讓圖片一直在最底層 不會影響到字的顯示
+            this.fabricCanvas.sendToBack(oImg)
+          },
+          {
+            crossOrigin: 'Anonymous'
+          }
+        )
       },
       render() {
         this.fabricCanvas.renderAll()
@@ -69,6 +75,25 @@
       },
       getMemesJson() {
         return fetch('https://api.imgflip.com/get_memes').then(response => response.json())
+      },
+      colorChange(e, index) {
+        const target = this.editTexts[index]
+        target.set('fill', e.target.value)
+        this.render()
+      },
+      textChange(val, index) {
+        const target = this.editTexts[index]
+        target.set('text', val)
+        this.render()
+      },
+      downloadImg() {
+        const url = this.fabricCanvas.toDataURL({
+          format: 'png'
+        })
+        const link = document.createElement('a')
+        link.href = url
+        link.download = 'yourname.png'
+        link.click()
       }
     },
     async mounted() {

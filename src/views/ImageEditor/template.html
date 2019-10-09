@@ -16,13 +16,31 @@
       @click="getRandomIndex"
     >下張</div>
     <div
-      v-for="item in editTexts"
-      class="editTexts"
+      class="button"
+      @click="downloadImg"
+    >儲存</div>
+    <div
+      v-for="(item, index) in editTexts"
+      class="edit_texts"
     >
       <el-input
-        v-model="item.text"
-        @input="render"
+        :value="item.text"
+        @input="(val) => textChange(val, index)"
       ></el-input>
+      <div class="picker">
+        fill:
+        <input
+          type="color"
+          :value="item.fill"
+          @change="(e) => colorChange(e, index)"
+        />
+      </div>
+    </div>
+    <div
+      class="add_text"
+      @click="addText"
+    >
+      <i class="el-icon-plus"></i>
     </div>
   </div>
 </div>

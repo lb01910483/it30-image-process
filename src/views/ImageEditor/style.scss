@@ -40,12 +40,36 @@
       text-align: center;
       cursor: pointer;
       letter-spacing: 2px;
-      width: 100px;
+      width: 86px;
       position: relative;
       margin-right: 10px;
     }
-    .editTexts {
+    .edit_texts {
       margin: 15px 0px;
+      display: flex;
+      align-items: center;
+      .picker {
+        display: flex;
+        width: 80px;
+        margin-left: 10px;
+        > input {
+          margin-left: 10px;
+        }
+      }
+    }
+    .add_text {
+      width: 100%;
+      border: 1px #c9c9c9 solid;
+      font-size: 25px;
+      height: 35px;
+      border-radius: 5px;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      &:hover {
+        background-color: #409eff;
+      }
     }
   }
 }
