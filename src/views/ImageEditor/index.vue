@@ -50,14 +50,15 @@
       },
       addText() {
         const editText = new fabric.IText('點擊編輯', {
+          top: 10 + this.editTexts.length * 50,
           fill: '#ffffff',
           stroke: '#000000',
           fontSize: 40,
           fontFamily: 'Microsoft JhengHei, PMingLiU, sans-serif'
         })
-
         this.editTexts.push(editText)
         this.fabricCanvas.add(editText)
+        editText.centerH()
       },
       getData(event) {
         const file = event.target.files[0]
@@ -100,23 +101,30 @@
       const canvas = this.$refs.drawCanvas
       this.fabricCanvas = new fabric.Canvas(canvas)
       this.fabricCanvas.on('object:moving', e => {
-        let obj = e.target
-        let { top, left, width, height } = obj.getBoundingRect()
+        const obj = e.target
         obj.setCoords()
-        // if (top < 0) {
-        //   obj.top = 0
-        // }
-        // if (top + height > this.height) {
-        //   obj.top = this.height - height
-        // }
-        // if (left < 0) {
-        //   obj.left = 0
-        // }
-        // if (left + width > this.width) {
-        //   obj.left = this.width - width
-        // }
-        // this.fabricCanvas.renderAll()
+        const { top, left, width, height } = obj.getBoundingRect()
+        if (top < 0) {
+          obj.top = 0
+        }
+        if (top + height > this.height) {
+          obj.top = this.height - height
+        }
+        if (left < 0) {
+          obj.left = 0
+        }
+        if (left + width > this.width) {
+          obj.left = this.width - width
+        }
+        this.fabricCanvas.renderAll()
       })
+      // window.addEventListener('keydown', event => {
+      //   if (event.keyCode == 8 || event.keyCode == 46) {
+      //     if (this.fabricCanvas.getActiveObject()) {
+      //       this.fabricCanvas.remove(this.fabricCanvas.getActiveObject())
+      //     }
+      //   }
+      // })
       this.loadCurrentImg()
     }
   }
