@@ -29,17 +29,16 @@
             this.width = scale * img.width
             this.fabricCanvas.setHeight(this.height)
             this.fabricCanvas.setWidth(this.width)
-            const oImg = img.set({
-              left: 0,
+            const newImg = img.set({
               hoverCursor: 'default',
               selectable: false
             })
-            oImg.scaleToHeight(this.height)
-            oImg.scaleToWidth(this.width)
-            this.fabricCanvas.add(oImg)
+            newImg.scaleToHeight(this.height)
+            newImg.scaleToWidth(this.width)
+            this.fabricCanvas.add(newImg)
             this.addText()
             // 讓圖片一直在最底層 不會影響到字的顯示
-            this.fabricCanvas.sendToBack(oImg)
+            this.fabricCanvas.sendToBack(newImg)
           },
           {
             crossOrigin: 'Anonymous'
@@ -65,7 +64,6 @@
         this.loadImg(getImageUrl(file))
       },
       loadCurrentImg() {
-        this.cleanAll()
         const currentFile = this.memes[this.currentIndex]
         this.loadImg(currentFile.url)
       },
@@ -105,19 +103,19 @@
         let obj = e.target
         let { top, left, width, height } = obj.getBoundingRect()
         obj.setCoords()
-        if (top < 0) {
-          obj.top = 0
-        }
-        if (top + height > this.height) {
-          obj.top = this.height - height
-        }
-        if (left < 0) {
-          obj.left = 0
-        }
-        if (left + width > this.width) {
-          obj.left = this.width - width
-        }
-        this.fabricCanvas.renderAll()
+        // if (top < 0) {
+        //   obj.top = 0
+        // }
+        // if (top + height > this.height) {
+        //   obj.top = this.height - height
+        // }
+        // if (left < 0) {
+        //   obj.left = 0
+        // }
+        // if (left + width > this.width) {
+        //   obj.left = this.width - width
+        // }
+        // this.fabricCanvas.renderAll()
       })
       this.loadCurrentImg()
     }
