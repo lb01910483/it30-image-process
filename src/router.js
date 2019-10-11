@@ -24,6 +24,11 @@ export default new Router({
       path: '/imageEditor',
       name: 'imageEditor',
       component: () => import('./views/ImageEditor/index.vue')
+    },
+    {
+      path: '/handTrack',
+      name: 'handTrack',
+      component: () => import('./views/HandTrack/index.vue')
     }
   ]
 })

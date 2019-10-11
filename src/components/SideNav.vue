@@ -16,6 +16,9 @@
       <el-menu-item index="/imageEditor">
         <span slot="title">梗圖編輯器</span>
       </el-menu-item>
+      <el-menu-item index="/handTrack">
+        <span slot="title">手部追蹤</span>
+      </el-menu-item>
     </el-menu>
   </div>
 </template>
