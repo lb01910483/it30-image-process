@@ -1,15 +1,29 @@
 <div class="hand_track">
-  <video
-    autoplay
-    ref="video"
-  ></video>
-  {{x}} {{y}}
-  <canvas
-    ref="bgCanvas"
-    class="canvas"
-  ></canvas>
-  <canvas
-    ref="fgCanvas"
-    class="canvas"
-  ></canvas>
+  <template v-show="!isLoading">
+    <video
+      autoplay
+      ref="video"
+    ></video>
+    <canvas
+      ref="videoCanvas"
+      class="canvas"
+    ></canvas>
+    <div class="scratch">
+      <canvas
+        ref="bgCanvas"
+        class="canvas"
+      ></canvas>
+      <canvas
+        ref="fgCanvas"
+        class="canvas"
+        @mousemove="handleMousemove"
+      ></canvas>
+    </div>
+  </template>
+  <template v-if="isLoading">
+    <div class="loading">
+      Loading Model ......
+    </div>
+  </template>
+
 </div>

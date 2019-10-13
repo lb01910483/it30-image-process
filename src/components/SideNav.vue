@@ -17,7 +17,7 @@
         <span slot="title">梗圖編輯器</span>
       </el-menu-item>
       <el-menu-item index="/handTrack">
-        <span slot="title">手部追蹤</span>
+        <span slot="title">手部刮刮樂</span>
       </el-menu-item>
     </el-menu>
   </div>

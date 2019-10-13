@@ -2,8 +2,27 @@
   video {
     display: none;
   }
+  .loading {
+    position: absolute;
+    top: 20px;
+    left: 60px;
+  }
   .canvas {
     width: 450px;
     height: 380px;
+    display: inline-block;
+  }
+  .scratch {
+    position: relative;
+    width: 450px;
+    height: 380px;
+    display: inline-block;
+    canvas {
+      position: absolute;
+      top: 0px;
+      left: 0px;
+      width: 600px;
+      height: 600px;
+    }
   }
 }
