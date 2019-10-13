@@ -1,0 +1,15 @@
+<div class="ar">
+  <a-scene
+    embedded
+    arjs
+  >
+    <a-marker preset="hiro">
+      <a-entity
+        position='0 0 0'
+        scale="0.1 0.1 0.1"
+        :gltf-model="url"
+      ></a-entity>
+    </a-marker>
+    <a-entity camera></a-entity>
+  </a-scene>
+</div>

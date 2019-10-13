@@ -29,6 +29,11 @@ export default new Router({
       path: '/handTrack',
       name: 'handTrack',
       component: () => import('./views/HandTrack/index.vue')
+    },
+    {
+      path: '/ar',
+      name: 'ar',
+      component: () => import('./views/Ar/index.vue')
     }
   ]
 })

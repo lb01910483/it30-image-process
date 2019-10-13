@@ -19,6 +19,9 @@
       <el-menu-item index="/handTrack">
         <span slot="title">手部刮刮樂</span>
       </el-menu-item>
+      <el-menu-item index="/ar">
+        <span slot="title">Ar</span>
+      </el-menu-item>
     </el-menu>
   </div>
 </template>

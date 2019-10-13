@@ -95,5 +95,15 @@ const config = {
 module.exports = (env, argv) => {
   config.output.publicPath =
     argv.mode === 'production' ? '/it30-image-process/' : '/'
+  config.plugins.push(
+    new webpack.DefinePlugin({
+      'process.env': {
+        assetsPath:
+          argv.mode === 'production'
+            ? JSON.stringify('/it30-image-process/')
+            : JSON.stringify('/')
+      }
+    })
+  )
   return config
 }

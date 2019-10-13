@@ -29,7 +29,7 @@
       }
     },
     watch: {
-      '$route'() {
+      $route() {
         this.showNav = false
       }
     }
@@ -44,6 +44,7 @@
   #app {
     font-family: 'Microsoft JhengHei', 'Apple LiGothic Medium', 'PMingLiU', 'sans-serif', 'serif';
     color: #2c3e50;
+    height: 100%;
   }
   .nav {
     width: 250px;
